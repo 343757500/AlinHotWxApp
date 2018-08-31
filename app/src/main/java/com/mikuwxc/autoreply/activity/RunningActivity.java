@@ -13,6 +13,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -48,6 +49,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.mikuwxc.autoreply.AlarmReceiver;
@@ -175,8 +177,9 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         //设置极光推送的别名
         setTagAndAlias();
 
+        ToastUtil.showLongToast("app版本1.1");
 
-        //ToastUtil.showLongToast("修复bug333333333333");
+
         SharedPrefsUtils.putBoolean("authority", false);
 
         requestPermission(this);
@@ -1765,8 +1768,8 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
             public void onSuccess(String s, Call call, okhttp3.Response response) {
                 Log.e("111","result:" + s);
                 try {
-                    HttpImeiBean bean = new Gson().fromJson(s, HttpImeiBean.class);
-                    if (bean.isSuccess()&&bean.isResult()) {
+                    HttpImeiBean<Boolean> bean = new Gson().fromJson(s, new TypeToken<HttpImeiBean<Boolean>>(){}.getType());
+                    if (bean.isSuccess()&&bean.getResult()) {
                         Log.e("111", "保存IMEI信息成功:");
                         handler.postDelayed(runnable, 60000);//每两秒执行一次runnable.
                     }else {

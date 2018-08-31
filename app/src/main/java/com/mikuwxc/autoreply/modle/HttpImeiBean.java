@@ -1,6 +1,6 @@
 package com.mikuwxc.autoreply.modle;
 
-public class HttpImeiBean {
+public class HttpImeiBean<T> {
     /**
      * msg : 登录成功
      * code : 200
@@ -11,7 +11,7 @@ public class HttpImeiBean {
     private String msg;
     private String code;
     private boolean success;
-    private boolean result;
+    private T result;
 
     public String getMsg() {
         return msg;
@@ -37,11 +37,11 @@ public class HttpImeiBean {
         this.success = success;
     }
 
-    public boolean isResult() {
+    public T getResult() {
         return result;
     }
 
-    public void setResult(boolean result) {
+    public void setResult(T result) {
         this.result = result;
     }
 }

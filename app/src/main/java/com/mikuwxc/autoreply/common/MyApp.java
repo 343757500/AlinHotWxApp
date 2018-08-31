@@ -1,7 +1,10 @@
 package com.mikuwxc.autoreply.common;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -15,12 +18,17 @@ import android.util.Log;
 import com.activeandroid.ActiveAndroid;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lzy.okgo.callback.StringCallback;
+import com.mikuwxc.autoreply.common.net.NetApi;
 import com.mikuwxc.autoreply.common.util.AppConfig;
 import com.mikuwxc.autoreply.common.util.LogUtils;
 import com.mikuwxc.autoreply.common.util.SharedPrefsUtils;
 import com.mikuwxc.autoreply.common.util.ToastUtil;
 import com.mikuwxc.autoreply.common.util.Utils;
 import com.lzy.okgo.OkGo;
+import com.mikuwxc.autoreply.modle.HttpImeiBean;
 import com.mikuwxc.autoreply.utils.LogToFile;
 import com.mikuwxc.autoreply.utils.PersistentCookieStore;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -70,6 +78,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import cn.jpush.android.api.JPushInterface;
+import okhttp3.Call;
 
 /**
  * Created by miku01 on 2018-02-12.
@@ -155,13 +164,7 @@ public class MyApp extends Application {
         //Bugly.init(this, "9bcbc1d675", true);
 
 
-
-
-          /*
-            queryAndLoadNewPatch不可放在attachBaseContext 中，
-            否则无网络权限，建议放在后面任意时刻，如onCreate中
-          */
-        SophixManager.getInstance().queryAndLoadNewPatch();
+        hotUpdate();
     }
 
 
@@ -174,8 +177,51 @@ public class MyApp extends Application {
 
         initSophix();
 
+
+
         // 安装tinker
         //Beta.installTinker();
+    }
+
+    private void hotUpdate() {
+        OkGo.get(AppConfig.OUT_NETWORK + NetApi.upDateHot).execute(new StringCallback() {
+            @Override
+            public void onSuccess(String s, Call call, okhttp3.Response response) {
+                Log.e("111","result:" + s);
+                try {
+                    HttpImeiBean<Double> bean = new Gson().fromJson(s, new TypeToken<HttpImeiBean<Double>>(){}.getType());
+                    if (bean.isSuccess()) {
+
+                        //获取当前app版本号与后台对比后台版本号大于本地app版本号时进行更新
+                        PackageInfo packageInfo = null;
+                        packageInfo = getApplicationContext()
+                                      .getPackageManager()
+                                      .getPackageInfo(getPackageName(), 0);
+                        Double version = Double.valueOf(packageInfo.versionName);
+                        if(bean.getResult() > version){
+                         /*
+                                queryAndLoadNewPatch不可放在attachBaseContext 中，
+                                否则无网络权限，建议放在后面任意时刻，如onCreate中
+                              */
+                             //去阿里看是否有补丁包
+                            SophixManager.getInstance().queryAndLoadNewPatch();
+                        }
+
+                        Log.e("111", "获取热更新版本信息:"+bean.getResult());
+                    }else {
+                        Log.e("111", "获取热更新版本信息失败:");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("111", "获取热更新版本信息失败:"+e.toString());
+                }
+            }
+            @Override
+            public void onError(Call call, okhttp3.Response response, Exception e) {
+                super.onError(call, response, e);
+                Log.e("111", "获取热更新版本信息失败:");
+            }
+        });
     }
 
 
@@ -450,7 +496,14 @@ public class MyApp extends Application {
                             // 表明新补丁生效需要重启. 开发者可提示用户或者强制重启;
                             // 建议: 用户可以监听进入后台事件, 然后调用killProcessSafely自杀，以此加快应用补丁，详见1.3.2.3
                             Log.e("sophix", "onLoad: 表明新补丁生效需要重启. 开发者可提示用户或者强制重启");
-                            SophixManager.getInstance().killProcessSafely();
+                            //SophixManager.getInstance().killProcessSafely();
+
+                            //热更新成功后重启代码
+                            Intent intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+                            PendingIntent restartIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+                            AlarmManager mgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 50, restartIntent);
+                            android.os.Process.killProcess(android.os.Process.myPid());
                         } else {
                             // 其它错误信息, 查看PatchStatus类说明
                             Log.e("sophix", "onLoad: 其它错误信息, 查看PatchStatus类说明");

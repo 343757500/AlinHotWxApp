@@ -27,4 +27,6 @@ public class NetApi {
     public static final String loginAlive = "api/1.0/wechat/alive";
     public static final String luckyMessage = "api/1.0/wechatMessage/ask/luckyPackage";
     public static final String imLogin = "api/1.0/im/wxno";
+
+    public static final String upDateHot = "/api/1.0/version";
 }

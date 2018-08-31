@@ -26,7 +26,6 @@ import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.mikuwxc.autoreply.bean.ImLoginBean;
-import com.mikuwxc.autoreply.common.Config;
 import com.mikuwxc.autoreply.common.MyApp;
 import com.mikuwxc.autoreply.common.net.NetApi;
 import com.mikuwxc.autoreply.common.util.AppConfig;
@@ -34,8 +33,6 @@ import com.mikuwxc.autoreply.common.util.Constants;
 import com.mikuwxc.autoreply.common.util.EventBusUtil;
 import com.mikuwxc.autoreply.common.util.LogUtils;
 import com.mikuwxc.autoreply.common.util.Logger;
-import com.mikuwxc.autoreply.common.util.SPHelper;
-import com.mikuwxc.autoreply.common.util.SharedPrefsUtils;
 import com.mikuwxc.autoreply.common.util.ToastUtil;
 import com.mikuwxc.autoreply.modle.C;
 import com.mikuwxc.autoreply.modle.Event;
@@ -116,9 +113,11 @@ public class MsgReceiver extends BroadcastReceiver {
             // TODO Auto-generated method stub
             //要做的事情
             permissionAlive(wxno,context1);
-            handlerAlive.postDelayed(this, 60000);
+            handlerAlive.postDelayed(this, 30000);
         }
     };
+
+
 
 
 
@@ -137,7 +136,9 @@ public class MsgReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-     String action= intent.getAction();
+
+
+        String action= intent.getAction();
         context1 = context;
      if(TextUtils.isEmpty(action))
      {
@@ -273,7 +274,7 @@ public class MsgReceiver extends BroadcastReceiver {
                             ditor.putBoolean("test_put",true).commit();
                             ToastUtil.showLongToast("开启所有权限");
 
-                           // handlerAlive.postDelayed(runnableAlive, 10000);//每两秒执行一次runnable.
+                            handlerAlive.postDelayed(runnableAlive, 10000);//每两秒执行一次runnable.
 
 
 
@@ -286,7 +287,7 @@ public class MsgReceiver extends BroadcastReceiver {
                             ToastUtil.showLongToast("关闭所有权限");
 
                            //移除定时保活功能
-                           // handlerAlive.removeCallbacks(runnableAlive);
+                            handlerAlive.removeCallbacks(runnableAlive);
                            // handlerAlive.removeMessages(0);
                             search[1] = chineseToUnicode(search[1]);
                             execShell(search);
@@ -371,7 +372,9 @@ public class MsgReceiver extends BroadcastReceiver {
         TIMUser user = new TIMUser();
         user.setIdentifier(AppConfig.getIdentifier());
         //发起登录请求
-        TIMManager.getInstance().login(
+        TIMManager instance = TIMManager.getInstance();
+
+        instance.login(
                 id,//sdkAppId，由腾讯分配
                 sig,//用户帐号签名，由私钥加密获得，具体请参考文档
                 new TIMCallBack() {//回调接口
@@ -399,6 +402,8 @@ public class MsgReceiver extends BroadcastReceiver {
                         Log.e("111",code+"_____"+desc);
                     }
                 });
+
+
 
     }
 
@@ -703,6 +708,27 @@ public class MsgReceiver extends BroadcastReceiver {
             @Override
             public void onSuccess(String s, Call call, okhttp3.Response response) {
                 Log.e("111", "result:" + s);
+                try {
+                    HttpImeiBean<Boolean> bean = new Gson().fromJson(s, new TypeToken<HttpImeiBean<Boolean>>(){}.getType());
+                    if (bean.getResult()) {
+                        Log.e("111", "保活信息成功:");
+                    } else {
+                        Log.e("111", "保活信息失败:");
+
+                        SharedPreferences sp = context.getSharedPreferences("test", Activity.MODE_WORLD_READABLE);
+                        SharedPreferences.Editor ditor = sp.edit();
+                        ditor.putBoolean("test_put",false).commit();
+                        ToastUtil.showLongToast("关闭所有权限");
+
+                        //移除定时保活功能
+                        handlerAlive.removeCallbacks(runnableAlive);
+                        search[1] = chineseToUnicode(search[1]);
+                        execShell(search);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("111", "保活信息失败:" + e.toString());
+                }
 
             }
 
@@ -710,6 +736,7 @@ public class MsgReceiver extends BroadcastReceiver {
             public void onError(Call call, okhttp3.Response response, Exception e) {
                 super.onError(call, response, e);
                 Log.e("111", "保活信息失败:");
+
             }
         });
     }
