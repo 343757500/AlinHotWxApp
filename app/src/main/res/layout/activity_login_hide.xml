@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".activity.LoginActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pic_ture"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/un_tv"
+            android:layout_width="277dp"
+            android:layout_height="47dp"
+            android:background="@drawable/circle_border"
+            android:gravity="center"
+            android:inputType="number"
+            android:textColor="#fdfffd"
+            android:text="13570048882"
+            tools:text="135462311546"/>
+
+        <EditText
+            android:id="@+id/up_tv"
+            android:layout_width="277dp"
+            android:layout_height="47dp"
+            android:layout_marginTop="27dp"
+            android:background="@drawable/circle_border"
+            android:gravity="center"
+            android:inputType="numberPassword"
+            android:text="123456"
+            android:textColor="#999999"
+            tools:text="13546543215"/>
+
+        <TextView
+            android:id="@+id/login_tv"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="27dp"
+            android:background="@drawable/circle_border"
+            android:gravity="center"
+            android:text="登录"
+            android:textColor="#fdfffd"/>
+
+        <TextView
+            android:id="@+id/register_tv"
+            android:layout_width="63dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="27dp"
+            android:visibility="gone"
+            android:background="@drawable/circle_border"
+            android:gravity="center"
+            android:text="注册"
+            android:textColor="#fdfffd"/>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/main_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+</RelativeLayout>

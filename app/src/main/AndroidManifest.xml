@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.mikuwxc.autoreply">
+
+    <!-- Required -->
+    <permission
+        android:name="com.mikuwxc.autoreply.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature"/>
+    <!-- Required  一些系统要求的权限，如访问网络等-->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="com.mikuwxc.autoreply.JPUSH_MESSAGE"/>
+
+    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
+
+    <!-- IM需要的权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions"/>
+    <!-- 需要运行时注册的权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <!--用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!--用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!--用于提高GPS定位速度-->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <!--读取缓存数据-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!--用于读取手机当前的状态-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!-- 更改设置 -->
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions"/>
+    <!-- 3.2.0版本增加 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <!-- 3.2.0版本增加-->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+
+
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <!-- SDCard中创建与删除文件权限 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <!-- 向SDCard写入数据权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+
+    <permission android:name="android.permission.FORCE_STOP_PACKAGES"/>
+    <uses-permission android:name="android.permission.RESTART_PACKAGES"/>
+
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
+    <!-- IM需要的权限 -->
+    <application
+        android:name="com.mikuwxc.autoreply.common.MyApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/loge"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        tools:replace="android:icon,android:theme,android:allowBackup"
+        android:theme="@style/AppTheme1">
+
+        <!-- Ali热更新 -->
+        <meta-data
+            android:name="com.taobao.android.hotfix.IDSECRET"
+            android:value="25050241-1" />
+
+        <meta-data
+            android:name="com.taobao.android.hotfix.APPSECRET"
+            android:value="a5d63a74d4492cb6285ccddd80f351fd" />
+
+        <meta-data
+            android:name="com.taobao.android.hotfix.RSASECRET"
+            android:value="MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDH3VesUCyzKG3Vc+40mdTQ11zI7kMHCV6KpI3beoLSLYaYMjHRa7/nJNfx4N/dnI0Xx7FJP5N6vohvGVUuaSLF+dDzyagohOz1YhqOK4AbYMHTd02L/nlhe4bxoSaLSlbKUpwHJ83wTFyFIBPZ71J6LAGaP8gQCiMGDcZdy+P8wZKEujnFySR6BScRkUmwCBK6lQccNhNLkrBBgEncaYnVAUvAI5VXFErtsMwHiqtTXV64seiRNPtniqlq8jJ9EYkyAdT+vATI92ezjUF1f+PDlzuduBfIeUCvDLCALqcmTy/ZTys8hPWsteVSYIZ/v2tkithtYweQbQGXtHlELVl5AgMBAAECggEBALCCq8ZTfFaxcubbntk3rnrOaHRP8ERLowJAt8PJG7YxXLgXRGYWigHCSTCmEC+w7e69frYY/s+da/LqZY86bOp5aW+Uff1i/77q6Fb81gPX3PY8W/EySdKs/I1zbA4CFkpS0NeE8NyzI9aycLW9JZMeQEAQ6kg4G5xiF/mIcw4p+vUxajGjJXNyOSNHV3V/ktqOL9Fe/mq+Y+3pDTktQxCoDw/0+dbldkw3zVcsrDRYOITpPmR7zgRIQMIT5Yempm+1RmjO9zZ9qcLyw0senLm/yNguST8fJsKV0wBrHFZ3reJZ/X0hHFLggIcBvqULnWGOIN5swSVuQGuixcvdfb0CgYEA5r1gEHXzaXPCMba9inNa1P8MQMOa30BX0/Iu/nFxzbghbNR5yQu6kgqo0YQeIO9WI+rLl7kFGfjWPtQYxSdtFhr4XAAdMyqp3TmQAveXxf72+b+I189NA4T/NSPRlQvbYvtAZaCKyyoE4PZX6OB3CURYBt6heV7PUT0VECMiNfMCgYEA3b6sLh6UIMBVxXgNZdgUU7E5WndXuOLScqI6Jxu2wVGtDA6ypj5gXV8dOEkOyL3yRQVZAyD4rLbNn3uR1VkpjRdiHkhS7bT68uEUJBmlZm6pj4ps3Xdokcce0UkmQwBuf/tenxRvflcPJDvlEKTOUuD9xXwZ+BbFWcvFhHpsMeMCgYBII+lG/DmwPJr4hBPal5pMgblI/l8LcciD4XJD5yAXm3wH1J6G9v3L7z081Du/PFUIQb6JnzUzG5OQbSuZaGw4vxHrYbW/a5VUL00RQGvZYY/CIdoc7xk7AnfwG1TJbr2WwsstevYp8uc3lo2Bp7xPz2heLXj6w2O6GIjfVLy7dQKBgDYtO8wY1IAb/di9OCjF3lGEX0rnFZuqb1hqomKjtscMuYbUoHlVjB3D+1OhJeeN4P9UCydkit1H3H02p67Elg5OxD451WkWaqmkrFMVoP+h0fOsEmUZo4baa4EeqiZ8mILUW43qZEMt6hkkORcT7QT6y4XQiFfA2H7T9nIjpwOZAoGAP02eTo1OccvjjLlRhVioP4M5UJKROqjGCUkZC9f5M/6SvQ9wi5GXwF/eNEu655SRHi3S/zHxNEioYvbvi+X2ibtVG8VYvXYx9Hw4NTG5CbvXvSv5PYzTSkHmxOwsns9iIRp7P/ZUe6JW3GvhGflC2twbVQiOBYru98nE+Kj2ZKA=" />
+
+
+
+
+        <!-- xposed 元数据 -->
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true"/>
+        <meta-data
+            android:name="xposeddescription"
+            android:value="整合的app"/>
+        <meta-data
+            android:name="xposedminversion"
+            android:value="54"/>
+
+
+
+        <!-- 配置APP ID -->
+        <meta-data
+            android:name="BUGLY_APPID"
+            android:value="4d24b026c9" />
+        <!-- 配置APP版本号 -->
+        <meta-data
+            android:name="BUGLY_APP_VERSION"
+            android:value="1.0" />
+        <!-- 配置APP渠道号 -->
+        <meta-data
+            android:name="BUGLY_APP_CHANNEL"
+            android:value="myChannel" />
+        <!-- 配置Bugly调试模式（true或者false）-->
+        <meta-data
+            android:name="BUGLY_ENABLE_DEBUG"
+            android:value="true" />
+
+
+
+
+        <activity
+            android:name=".view.activity.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+        <!--<intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+
+            <category android:name="android.intent.category.LAUNCHER"/>
+        </intent-filter>-->
+        </activity>
+
+        <!-- AccessibilityService -->
+        <service
+            android:name=".service.AutoReplyService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/AutoReplyService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/auto_reply_service_config" />
+        </service>
+        <service
+            android:name=".service.AutoOpenLuckyMoneyService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/AutoOpenPacketService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/auto_open_lucky_money" />
+        </service>
+
+        <!--心跳轮询服务配置-->
+        <service
+            android:name=".service.PollingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.hsl.helper.service.PollingService"/>
+            </intent-filter>
+        </service>
+
+
+        <!-- 4.AndroidManifest.xml中注册广播myReceiver及MyService服务 -->
+        <receiver android:name=".service.AutoReplyService$myReceiver">
+            <intent-filter android:priority="2147483647"> <!-- 优先级加最高 -->
+                <!-- 系统启动完成后会调用 -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <!-- 解锁完成后会调用 -->
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <!-- 监听情景切换 -->
+                <action android:name="android.media.RINGER_MODE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 腾讯云IM -->
+        <!-- 【必须】消息收发service -->
+        <service
+            android:name="com.tencent.qalsdk.service.QalService"
+            android:exported="true"
+            android:process=":QALSERVICE" />
+        <service
+            android:name="com.tencent.qalsdk.service.QalAssistService"
+            android:exported="false"
+            android:process=":QALSERVICE" />
+
+        <!-- 【必须】 离线消息广播接收器 -->
+        <receiver
+            android:name="com.tencent.qalsdk.QALBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.tencent.qalsdk.broadcast.qal" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.tencent.qalsdk.core.NetConnInfoCenter"
+            android:process=":QALSERVICE">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+
+            <!-- ImSDK 3.0.2 后添加 -->
+            <intent-filter>
+                <action android:name="com.tencent.qalsdk.service.TASK_REMOVED" />
+            </intent-filter>
+        </receiver>
+        <!-- 腾讯云IM -->
+
+        <!-- Rich push 核心功能 since 2.0.6-->
+        <activity
+            android:name="cn.jpush.android.ui.PopWinActivity"
+            android:theme="@style/MyDialogStyle"
+            android:exported="false">
+        </activity>
+
+        <!-- Required SDK核心功能-->
+        <activity
+            android:name="cn.jpush.android.ui.PushActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.ui.PushActivity"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="com.mikuwxc.autoreply"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Required SDK 核心功能-->
+        <!-- 可配置android:process参数将PushService放在其他进程中 -->
+        <service
+            tools:replace="android:process"
+            android:name="cn.jpush.android.service.PushService"
+            android:process=":mult"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTER"/>
+                <action android:name="cn.jpush.android.intent.REPORT"/>
+                <action android:name="cn.jpush.android.intent.PushService"/>
+                <action android:name="cn.jpush.android.intent.PUSH_TIME"/>
+            </intent-filter>
+        </service>
+        <!-- since 3.0.9 Required SDK 核心功能-->
+        <provider
+            android:authorities="com.mikuwxc.autoreply.DataProvider"
+            android:name="cn.jpush.android.service.DataProvider"
+            android:exported="false"
+            />
+
+        <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
+        <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
+        <service
+            android:name="cn.jpush.android.service.DaemonService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.DaemonService"/>
+                <category android:name="com.mikuwxc.autoreply"/>
+            </intent-filter>
+
+        </service>
+        <!-- since 3.1.0 Required SDK 核心功能-->
+        <provider
+            android:authorities="com.mikuwxc.autoreply.DownloadProvider"
+            android:name="cn.jpush.android.service.DownloadProvider"
+            android:exported="true"
+            />
+        <!-- Required SDK核心功能-->
+        <receiver
+            android:name="cn.jpush.android.service.PushReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter android:priority="1000">
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>   <!--Required  显示通知栏 -->
+                <category android:name="com.mikuwxc.autoreply"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+            <!-- Optional -->
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
+
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Required SDK核心功能-->
+        <receiver
+            android:name="cn.jpush.android.service.AlarmReceiver"
+            android:exported="false"/>
+
+        <!-- User defined.  For test only  用户自定义的广播接收器-->
+        <receiver
+            android:name="com.mikuwxc.autoreply.service.MyReceiver"
+            android:exported="false"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.REGISTRATION"/> <!--Required  用户注册SDK的intent-->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/> <!--Required  用户接收SDK消息的intent-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/> <!--Required  用户接收SDK通知栏信息的intent-->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/> <!--Required  用户打开自定义通知栏的intent-->
+                <!--<action android:name="cn.jpush.android.intent.CONNECTION"/>&lt;!&ndash; 接收网络变化 连接/断开 since 1.6.3 &ndash;&gt;-->
+                <category android:name="com.mikuwxc.autoreply"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调-->
+        <receiver android:name="com.mikuwxc.autoreply.service.MyJPushMessageReceiver">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE"/>
+                <category android:name="com.mikuwxc.autoreply"></category>
+            </intent-filter>
+        </receiver>
+        <!-- Required  . Enable it you can get statistics data with channel -->
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="developer-default"/>
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="024b39e181fa9a902f3bf2ff"/> <!--  </>值来自开发者平台取得的AppKey-->
+
+        <activity
+            android:name=".view.activity.LoginActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:exported="true">
+        <!--    <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>-->
+        </activity>
+
+        <activity android:name=".view.activity.SecondActivity"
+            android:exported="true"/>
+
+        <service
+            android:name=".service.WechatService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:label="微信辅助">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/wechat_service_config"/>
+        </service>
+
+        <service
+            android:name=".service.HSLAlarmService"
+            android:exported="true"
+            android:enabled="true">
+        </service>
+
+        <service
+            android:name=".service.SensitiveService"
+            android:exported="true"
+            android:enabled="true">
+        </service>
+
+        <receiver android:name=".service.AlarmReceiver">
+        </receiver>
+
+
+
+
+        <activity
+            android:name=".activity.WelcomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.NoActionBar">
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>-->
+        </activity>
+        <!-- db -->
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="duoqun.db"/>
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1"/>
+
+        <service
+            android:name=".AutoReplyService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="多群"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@layout/accessibility_config"/>
+        </service>
+        <receiver
+            android:name=".AlarmReceiver"
+            android:process=":remote"/>
+
+        <activity
+            android:name=".activity.LockScreenActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.mikuwxc.autoreply.lockscreen"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity
+            android:name=".activity.RunningActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullImmerseMode"
+            android:launchMode="singleInstance">
+         <intent-filter>
+            <action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/>
+             <category android:name="android.intent.category.HOME" />
+             <category android:name="android.intent.category.DEFAULT" />
+             <category android:name="android.intent.category.MONKEY"/>
+        </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <!-- weixin -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data
+                    android:host="com.mikuwxc.autoreply"
+                    android:port="80"
+                    android:scheme="authresult"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+
+                <data android:scheme="wxeb5c0016a1cbd46e"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.HuliaoActivity"/>
+
+
+        <receiver android:name=".wcreceiver.MsgReceiver"
+            android:enabled="true"
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+            </intent-filter>
+        </receiver>
+
+    <!--    <receiver android:name=".wcreceiver.ShellReceiver"
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="com.zhongshao" />
+                <category android:name="com.zhongshaopeng" />
+            </intent-filter>
+        </receiver>-->
+
+
+        <!--开机广播接受者-->
+        <receiver android:name=".receiver.laucherReceiver">
+            <intent-filter>
+                <!--注册开机广播地址-->
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+
+
+        <activity
+            android:name="com.tencent.bugly.beta.ui.BetaActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|locale"
+            android:theme="@android:style/Theme.Translucent" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
+
+    </application>
+
+</manifest>

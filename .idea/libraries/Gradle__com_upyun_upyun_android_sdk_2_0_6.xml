@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.upyun:upyun-android-sdk-2.0.6">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/upyun-android-sdk-2.0.6.aar/fb5c0b78c31fe64f0cccbac407ce87e5/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/upyun-android-sdk-2.0.6.aar/fb5c0b78c31fe64f0cccbac407ce87e5/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.upyun/upyun-android-sdk/2.0.6/debe5f03951d9a59b33780e16836ea5dd0149d62/upyun-android-sdk-2.0.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

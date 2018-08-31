@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/RelativeLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:background="@drawable/ui">
+
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_width="fill_parent"
+        android:layout_height="170dp"
+        android:background="@drawable/listbg">
+        <!-- 第一个页面 -->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:id="@+id/screentext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="23sp"
+                android:textColor="#5F656D"
+                android:gravity="center"
+                android:text=""/>
+
+            <Button
+                android:id="@+id/showDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#5F656D"
+                android:background="@drawable/button"
+                />
+        </LinearLayout>
+        <!-- 第二个页面 -->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center">
+
+            <ListView
+                android:id="@+id/listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                >
+            </ListView>
+        </LinearLayout>
+    </ViewFlipper>
+
+    <Button
+        android:id="@+id/closebtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp"
+        android:textColor="#5F656D"
+        android:textSize="20sp"
+        android:text="关闭"
+        android:background="@drawable/button"/>
+
+    <TextView
+        android:id="@+id/timetext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="50sp"
+        android:textColor="#5F656D"
+        android:gravity="center"
+        android:layout_marginTop="70dp"/>
+
+    <TextView
+        android:id="@+id/caltext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/timetext"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:textColor="#5F656D"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/progbLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/caltext"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:textColor="#5F656D"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button"
+        android:enabled="false"/>
+
+</RelativeLayout>

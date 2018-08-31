@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#e4e4e4"
+                style="@style/activity_root"
+                tools:context=".activity.RunningActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pic_xiaoture"/>
+
+
+    <EditText
+        android:visibility="gone"
+        android:id="@+id/et_ip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:visibility="gone"
+        android:text="确认ip"
+        android:layout_below="@+id/et_ip"
+        android:id="@+id/bt_ip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textColor="#000000"
+        android:layout_marginTop="@dimen/dp_10"
+        android:id="@+id/tv1"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:text="插件版本：1.0.1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textColor="#000000"
+        android:layout_marginTop="@dimen/dp_10"
+        android:id="@+id/tv2"
+        android:layout_below="@+id/tv1"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:text="插件状态：模块已经激活"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:textColor="#000000"
+        android:layout_marginTop="@dimen/dp_10"
+        android:id="@+id/tv3"
+        android:layout_below="@+id/tv2"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:text="服务器连接状态：true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/wxState"
+        android:textColor="#000000"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_below="@+id/tv3"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:text="微信连接状态：true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:onClick="jumpToAddFriend"
+        android:text="测试添加"
+        android:visibility="gone"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:onClick="getNumInfo"
+        android:visibility="gone"
+        android:text="获取好友数"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/main_progress_bar"
+        android:layout_marginLeft="150dp"
+        android:onClick="changeSql"
+        android:text="更改数据库"
+        android:visibility="gone"/>
+    10690700367
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/main_progress_bar"
+        android:layout_marginLeft="150dp"
+        android:visibility="gone"
+        android:onClick="tongguo"
+        android:text="通过好友请求"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/main_progress_bar"
+        android:layout_marginLeft="150dp"
+        android:onClick="guanbi"
+        android:visibility="gone"
+        android:text="关闭微信"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="150dp"
+        android:visibility="gone"
+        android:onClick="add"
+        android:text="添加成功"/>
+
+    <Button
+        android:id="@+id/startChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="150dp"
+        android:onClick="chat"
+        android:visibility="gone"
+        android:text="开启互聊"/>
+
+    <Button
+        android:id="@+id/news"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="150dp"
+        android:onClick="chat"
+        android:visibility="visible"
+        android:text="重连微信"/>
+    <Button
+        android:layout_below="@+id/news"
+        android:id="@+id/newss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:onClick="chatt"
+        android:visibility="gone"
+        android:text="重连微信123"/>
+
+    <Button
+        android:id="@+id/getwxInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_marginLeft="250dp"
+        android:onClick="getwxInfo"
+        android:text="获取微信信息"
+        android:visibility="gone"/>
+
+    <FrameLayout
+        android:visibility="gone"
+        android:id="@+id/frameLayout"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="-1dp"
+        android:background="@drawable/head">
+
+        <com.mikuwxc.autoreply.widget.UrlCircleImageView
+            android:id="@+id/head_iv"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="0.4dp"
+            android:layout_marginTop="1.5dp"
+            android:src="@drawable/pic_ture"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/user_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bindInfo"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@+id/frameLayout"
+        android:textColor="#cdcdcd"
+        android:textSize="12sp"
+        tools:text="song"/>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/bindInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/frameLayout"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@+id/frameLayout"
+        android:background="#30ffffff"
+        android:padding="1dp"
+        android:text="已绑定"
+        android:textColor="#fdfe00"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/wxVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/user_num"
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:textColor="#cdcdcd"/>
+
+    <!--<TextView
+        android:visibility="visible"
+        android:id="@+id/wxState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/user_num"
+        android:layout_centerHorizontal="true"
+        android:text="。。。"
+        android:textColor="#cdcdcd"/>-->
+
+
+    <com.mikuwxc.autoreply.widget.MainProgressBar
+        android:visibility="gone"
+        android:id="@+id/main_progress_bar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/bindInfo"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/login_tv"
+        android:layout_width="63dp"
+        android:layout_height="28dp"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/circle_border"
+        android:gravity="center"
+        android:text="退出运行"
+        android:textColor="#fdfffd"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="220dp"
+        android:background="#ffffff"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/getwechatInfo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/icon_wechat_binding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="获取微信信息"
+                android:textColor="#333333"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#e6e6e6"/>
+
+        <LinearLayout
+            android:id="@+id/bindwechat"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/icon_wechat_binding"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="重新绑定"
+                android:textColor="#333333"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#e6e6e6"/>
+
+        <LinearLayout
+            android:id="@+id/setbtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/icon_auxiliary_function"/>
+
+            <TextView
+                android:id="@+id/service_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/service_stop"
+                android:textColor="#333333"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#e6e6e6"/>
+
+        <LinearLayout
+            android:id="@+id/exit_login"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/icon_switch"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="切换账号"
+                android:textColor="#333333"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/start_run"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="326dp"
+        android:background="@android:color/holo_blue_dark"
+        android:gravity="center"
+        android:text="@string/run_start"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"/>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="383dp"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="历史执行记录"
+            android:textColor="#5387f0"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ionn_big_up"/>
+    </LinearLayout>
+
+    <ListView
+        android:visibility="gone"
+        android:id="@+id/lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="424dp"
+        android:background="@android:color/white"/>
+</RelativeLayout>
