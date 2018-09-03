@@ -164,7 +164,7 @@ public class MyApp extends Application {
         //Bugly.init(this, "9bcbc1d675", true);
 
 
-        hotUpdate();
+       // hotUpdate();
     }
 
 
@@ -207,19 +207,19 @@ public class MyApp extends Application {
                             SophixManager.getInstance().queryAndLoadNewPatch();
                         }
 
-                        Log.e("111", "获取热更新版本信息:"+bean.getResult());
+                        Log.e("111", "获取App版本信息成功:"+bean.getResult());
                     }else {
-                        Log.e("111", "获取热更新版本信息失败:");
+                        Log.e("111", "获取App版本信息失败:");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e("111", "获取热更新版本信息失败:"+e.toString());
+                    Log.e("111", "获取App版本信息失败:"+e.toString());
                 }
             }
             @Override
             public void onError(Call call, okhttp3.Response response, Exception e) {
                 super.onError(call, response, e);
-                Log.e("111", "获取热更新版本信息失败:");
+                Log.e("111", "获取App版本信息失败:");
             }
         });
     }

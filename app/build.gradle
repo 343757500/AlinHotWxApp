@@ -156,13 +156,13 @@ dependencies {
     //又拍云存储sdk
     implementation 'com.upyun:upyun-android-sdk:2.0.6'
     dependencies {
-        compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+        implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     }
     implementation files('libs/library-1.0.19.jar')
     implementation files('libs/universal-image-loader-1.9.5.jar')
     implementation files('libs/activeandroid-3.1-beta.jar')
     implementation files('libs/fastjson-1.1.34.jar')
-    compileOnly files('lib/XposedBridgeApi-54.jar')
+    implementation files('lib/XposedBridgeApi-54.jar')
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.0.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
