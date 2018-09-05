@@ -145,6 +145,7 @@ public class MountReceiver extends XC_MethodHook {
                  final String path = Environment.getExternalStorageDirectory().toString() + "/shidoe/";
 
                 if (type.equals("1")) {
+
                     SendMesUtil.sendTxt(classLoader, create, name, content, 1, 1);
 
                 }else if (type.equals("3")){

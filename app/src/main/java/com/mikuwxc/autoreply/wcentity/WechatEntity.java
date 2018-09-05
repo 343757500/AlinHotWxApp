@@ -672,4 +672,7 @@ public abstract class WechatEntity {
     public String write_into_wx_sns_db_method2 = "";
     public String write_into_wx_sns_db_method3 = "";
     public String write_into_wx_sns_db_method4 = "";
+
+    public String sensitive_words_class="";
+    public String sensitive_words_method="";
 }

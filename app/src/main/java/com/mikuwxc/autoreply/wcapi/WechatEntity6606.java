@@ -665,5 +665,7 @@ class WechatEntity6606 extends WechatEntity {
         this.wechat_logout_class2 = "com.tencent.mm.ui.base.h";
         this.wechat_logout_method1 = "a";
         this.wechat_web_login_class1 = "com.tencent.mm.plugin.webwx.a.e";
+        this.sensitive_words_class="com.tencent.mm.ui.chatting.o";
+        this.sensitive_words_method="FZ";
     }
 }

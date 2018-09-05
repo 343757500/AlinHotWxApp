@@ -17,8 +17,9 @@ public class AppConfig {
     private static String selectHost;//选择服务器
     public static final String ROOT = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String APP_FOLDER = ROOT + "/HSL_WXFZ";
+    public static String OUT_NETWORK = "http://192.168.4.14:8085/";
    // public static String OUT_NETWORK = "http://192.168.4.50:8080/";
-    public static String OUT_NETWORK = "http://47.107.77.220:8080/";
+   // public static String OUT_NETWORK = "http://47.107.77.220:8080/";
     public static String Registration_Id = null;
     public static final String YOUPAIYUN ="http://cloned.test.upcdn.net";
 

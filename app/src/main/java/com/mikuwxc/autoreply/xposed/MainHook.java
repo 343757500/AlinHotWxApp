@@ -26,6 +26,7 @@ import com.mikuwxc.autoreply.wchook.DonateHook;
 import com.mikuwxc.autoreply.wchook.HideModule;
 import com.mikuwxc.autoreply.wchook.LogWechatDbPathAndPwdHook;
 import com.mikuwxc.autoreply.wchook.MessageHook;
+import com.mikuwxc.autoreply.wchook.SensitiveHook;
 import com.mikuwxc.autoreply.wchook.VersionParamNew;
 import com.mikuwxc.autoreply.wchook.WalletHook;
 import com.mikuwxc.autoreply.wcutil.PreferencesUtils;
@@ -44,6 +45,7 @@ import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 import static android.text.TextUtils.isEmpty;
@@ -110,9 +112,15 @@ public class MainHook implements IXposedHookLoadPackage {
         LogWechatDbPathAndPwdHook.hook(create,lpparam,classLoader1,mContext);
             //监听钱包
         WalletHook.hook(create, lpparam,classLoader1,mContext);
+
+        //敏感词操作
+            SensitiveHook.hook(create, lpparam);
+
         //操作微信相关
         Class receiver=classLoader.loadClass(Constance.receiver_wechat);
         XposedBridge.hookAllMethods(receiver,"onReceive",new MountReceiver());
+
+
         //聊天信息监听
         CommonHook.markAllActivity();
         try {
