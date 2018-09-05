@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">微信辅助</string>
+    <string name="app_name">设置</string>
 
     <string name="auto_reply_description">
         自动回复信息服务\n

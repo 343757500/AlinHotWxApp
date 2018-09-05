@@ -66,6 +66,7 @@ import com.mikuwxc.autoreply.bean.TaskJob;
 import com.mikuwxc.autoreply.bean.TaskRecord;
 import com.mikuwxc.autoreply.common.MyApp;
 import com.mikuwxc.autoreply.common.UI;
+import com.mikuwxc.autoreply.common.VersionInfo;
 import com.mikuwxc.autoreply.common.net.NetApi;
 import com.mikuwxc.autoreply.common.util.AppConfig;
 import com.mikuwxc.autoreply.common.util.Constants;
@@ -165,6 +166,8 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
             // 像搜索框中输入123，但是input不支持中文，蛋疼，而且这边没做输入法处理，默认会自动弹出输入法
     };
     private EditText et_ip;
+    private Object appVersionName;
+    private TextView tvVersion;
 
 
     @Override
@@ -177,17 +180,10 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         //设置极光推送的别名
         setTagAndAlias();
 
-        ToastUtil.showLongToast("app版本1.1");
-
-
-        SharedPrefsUtils.putBoolean("authority", false);
-
+        //权限申请
         requestPermission(this);
         //获取好友列表的广播
         sendReceiverGetwechat();
-
-
-
 
         //EventBusUtil.register(this);
        /* //初始化  控制器
@@ -209,6 +205,7 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         bindInfo = (TextView) findViewById(R.id.bindInfo);
         startChat = (Button) findViewById(R.id.startChat);
         wxState = (TextView) findViewById(R.id.wxState);
+        tvVersion = (TextView) findViewById(R.id.tvVersion);
         et_ip = (EditText) findViewById(R.id.et_ip);
 
         news = (Button) findViewById(R.id.news);
@@ -249,13 +246,12 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         findViewById(R.id.bt_ip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ip=et_ip.getText().toString();
-                String ipnew="http://"+ip+"/";
-                AppConfig.OUT_NETWORK=ipnew;
+                String ip = et_ip.getText().toString();
+                String ipnew = "http://" + ip + "/";
+                AppConfig.OUT_NETWORK = ipnew;
                 AppConfig.setHost(ipnew);
             }
         });
-
 
 
         findViewById(R.id.exit_login).setOnClickListener(new View.OnClickListener() {
@@ -334,6 +330,10 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         if (getScreenOffTime() < 60000)
             setScreenOffTime(60000);
         Log.d("getScreenOffTime", "onCreate: " + getScreenOffTime());
+
+
+        //获取app版本
+        getAppVersionName();
     }
 
     private void getNewss() {
@@ -1794,12 +1794,6 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         String DEVICE_ID = tm.getDeviceId();
@@ -1905,4 +1899,19 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
     };
 
 
+    public void getAppVersionName() {
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getApplicationContext()
+                    .getPackageManager()
+                    .getPackageInfo(getPackageName(), 0);
+            tvVersion.setText("当前软件版本："+ VersionInfo.versionName+"");
+            ToastUtil.showLongToast(VersionInfo.versionName+"");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        //Integer version = Integer.valueOf(packageInfo.versionCode);*/
+           /* tvVersion.setText("当前软件版本："+ VersionInfo.versionName+"----");
+            ToastUtil.showLongToast(VersionInfo.versionName+"");*/
+    }
 }

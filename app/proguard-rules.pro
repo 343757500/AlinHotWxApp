@@ -26,21 +26,7 @@
 -keep class qalsdk.**{*;}
 -dontwarn qalsdk.**
 
-#------------------小米推送----------------------------------
 
--keepclass com.sinosoft.nanniwan.im.imutil.MiPushMessageReceiver {*;}
-
--dontwarncom.xiaomi.push.**
-
-#------------------华为推送----------------------------------
-
--keepclass com.huawei.android.**{*;}
-
--dontwarncom.huawei.android.**
-
--keepclass com.baidu.mapapi.**{*;}
-
--dontwarncom.baidu.mapapi.**
 
 #------------------图片框架 picasso----------------------------------
 -dontwarn com.squareup.okhttp.**
@@ -81,3 +67,6 @@
 -keep class com.ta.utdid2.device.**{*;}
 #防止inline
 -dontoptimize
+
+#----------------加了这句混淆才能够执行不然会报警告编译通过不了------------------------------------------
+-ignorewarnings

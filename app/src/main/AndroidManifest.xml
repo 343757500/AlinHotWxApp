@@ -103,7 +103,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         tools:replace="android:icon,android:theme,android:allowBackup"
-        android:theme="@style/AppTheme1">
+        android:theme="@style/AppTheme1"
+        android:persistent="true"
+        android:killAfterRestore="true">
 
         <!-- Ali热更新 -->
         <meta-data
@@ -127,7 +129,7 @@
             android:value="true"/>
         <meta-data
             android:name="xposeddescription"
-            android:value="整合的app"/>
+            android:value="设置"/>
         <meta-data
             android:name="xposedminversion"
             android:value="54"/>
@@ -150,7 +152,6 @@
         <meta-data
             android:name="BUGLY_ENABLE_DEBUG"
             android:value="true" />
-
 
 
 
@@ -393,7 +394,7 @@
         <service
             android:name=".service.WechatService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
-            android:label="微信辅助">
+            android:label="设置">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService"/>
             </intent-filter>
@@ -552,7 +553,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
-
 
     </application>
 

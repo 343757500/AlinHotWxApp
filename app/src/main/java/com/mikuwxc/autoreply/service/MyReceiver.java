@@ -1,6 +1,8 @@
 package com.mikuwxc.autoreply.service;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +45,17 @@ public class MyReceiver extends BroadcastReceiver {
             // 打开微信的启动界面，am命令的用法可自行百度、Google// 等待3秒
             "am force-stop com.tencent.mm",
             "am start -a com.tencent.mm.action.BIZSHORTCUT -f 67108864"
+            // "am  start  service  com.mikuwxc.autoreply.AutoReplyService"// 打开微信的搜索
+            // 像搜索框中输入123，但是input不支持中文，蛋疼，而且这边没做输入法处理，默认会自动弹出输入法
+    };
+
+
+    private String[] search1 = {
+            //  "input keyevent 3",// 返回到主界面，数值与按键的对应关系可查阅KeyEvent
+            // "sleep 1",// 等待1秒
+            // 打开微信的启动界面，am命令的用法可自行百度、Google// 等待3秒
+            "am force-stop com.mikuwxc.autoreply",
+            "adb shell am start -n  com.mikuwxc.autoreply"
             // "am  start  service  com.mikuwxc.autoreply.AutoReplyService"// 打开微信的搜索
             // 像搜索框中输入123，但是input不支持中文，蛋疼，而且这边没做输入法处理，默认会自动弹出输入法
     };
@@ -122,6 +135,19 @@ public class MyReceiver extends BroadcastReceiver {
                                 execShell(search);
                             }
 */
+                        }else if("203".equals(type)){
+                            Context context1 = ContextHolder.getContext();
+                            Intent intent1 = context1.getPackageManager().getLaunchIntentForPackage(context1.getPackageName());
+                            PendingIntent restartIntent = PendingIntent.getActivity(context1, 0, intent1, PendingIntent.FLAG_ONE_SHOT);
+                            AlarmManager mgr = (AlarmManager)context1.getSystemService(Context.ALARM_SERVICE);
+                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 50, restartIntent);
+                            android.os.Process.killProcess(android.os.Process.myPid());
+
+
+
+
+
+
                         }
 
                     }catch (Exception e){

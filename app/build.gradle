@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'miku'
             keyPassword 'miku2016'
-            storeFile file('D:/zhenghe2/hsl_wx_apk/app/file/miku.jks')
+            storeFile file('D:/AlinHot/hsl_wx_apk/app/file/miku.jks')
             storePassword 'miku2016'
         }
     }
@@ -20,7 +20,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 23
         versionCode 1
-        versionName "1.1"
+        versionName "1.0"
 
 
 
@@ -162,7 +162,7 @@ dependencies {
     implementation files('libs/universal-image-loader-1.9.5.jar')
     implementation files('libs/activeandroid-3.1-beta.jar')
     implementation files('libs/fastjson-1.1.34.jar')
-    implementation files('lib/XposedBridgeApi-54.jar')
+    compileOnly files('lib/XposedBridgeApi-54.jar')
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.0.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'

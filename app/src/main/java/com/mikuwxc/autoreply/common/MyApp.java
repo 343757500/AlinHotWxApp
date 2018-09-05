@@ -29,6 +29,7 @@ import com.mikuwxc.autoreply.common.util.ToastUtil;
 import com.mikuwxc.autoreply.common.util.Utils;
 import com.lzy.okgo.OkGo;
 import com.mikuwxc.autoreply.modle.HttpImeiBean;
+import com.mikuwxc.autoreply.service.ContextHolder;
 import com.mikuwxc.autoreply.utils.LogToFile;
 import com.mikuwxc.autoreply.utils.PersistentCookieStore;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -110,7 +111,7 @@ public class MyApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-
+        ContextHolder.initial(this);
         // 获取Runtime对象  获取root权限
         Runtime runtime = Runtime.getRuntime();
         try {
@@ -164,7 +165,7 @@ public class MyApp extends Application {
         //Bugly.init(this, "9bcbc1d675", true);
 
 
-       // hotUpdate();
+        hotUpdate();
     }
 
 
@@ -189,21 +190,19 @@ public class MyApp extends Application {
             public void onSuccess(String s, Call call, okhttp3.Response response) {
                 Log.e("111","result:" + s);
                 try {
-                    HttpImeiBean<Double> bean = new Gson().fromJson(s, new TypeToken<HttpImeiBean<Double>>(){}.getType());
+                    HttpImeiBean<Integer> bean = new Gson().fromJson(s, new TypeToken<HttpImeiBean<Integer>>(){}.getType());
                     if (bean.isSuccess()) {
 
                         //获取当前app版本号与后台对比后台版本号大于本地app版本号时进行更新
-                        PackageInfo packageInfo = null;
+                     /*   PackageInfo packageInfo = null;
                         packageInfo = getApplicationContext()
                                       .getPackageManager()
-                                      .getPackageInfo(getPackageName(), 0);
-                        Double version = Double.valueOf(packageInfo.versionName);
-                        if(bean.getResult() > version){
-                         /*
-                                queryAndLoadNewPatch不可放在attachBaseContext 中，
-                                否则无网络权限，建议放在后面任意时刻，如onCreate中
-                              */
-                             //去阿里看是否有补丁包
+                                      .getPackageInfo(getPackageName(), 0);*/
+                        //Integer version = Integer.valueOf(packageInfo.versionCode);
+                        if(bean.getResult() > VersionInfo.versionCode){
+                         /*queryAndLoadNewPatch不可放在attachBaseContext 中，
+                           否则无网络权限，建议放在后面任意时刻，如onCreate中*/
+                         //去阿里看是否有补丁包
                             SophixManager.getInstance().queryAndLoadNewPatch();
                         }
 
@@ -454,7 +453,7 @@ public class MyApp extends Application {
      * 且在其他方法之前
      */
     private void initSophix() {
-        String appVersion = "1.0";
+        String appVersion = "4.0";
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             appVersion = packageInfo.versionName;
@@ -506,7 +505,7 @@ public class MyApp extends Application {
                             android.os.Process.killProcess(android.os.Process.myPid());
                         } else {
                             // 其它错误信息, 查看PatchStatus类说明
-                            Log.e("sophix", "onLoad: 其它错误信息, 查看PatchStatus类说明");
+                            Log.e("sophix", "onLoad: 其它错误信息, 查看PatchStatus类说明"+code);
                         }
                     }
                 }).initialize();

@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.mikuwxc.autoreply.bean.ImLoginBean;
 import com.mikuwxc.autoreply.common.MyApp;
+import com.mikuwxc.autoreply.common.VersionInfo;
 import com.mikuwxc.autoreply.common.net.NetApi;
 import com.mikuwxc.autoreply.common.util.AppConfig;
 import com.mikuwxc.autoreply.common.util.Constants;
@@ -228,15 +230,14 @@ public class MsgReceiver extends BroadcastReceiver {
         if (friendList!=null){
             sendWXFriendList(friendList,context, wxno,wxid,headImgUrl,userName);
         }
-
     }
 
 
     private void sendWXFriendList(String WXFriendList,Context context,String wxno,String wxid,String headImgUrl,String userName) {
          List<FriendBean> friendBean = new Gson().fromJson(WXFriendList, new TypeToken<List<FriendBean>>() {
         }.getType());
-
          //登录IM
+        //获取sim卡唯一标识
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -244,14 +245,15 @@ public class MsgReceiver extends BroadcastReceiver {
         }
         String DEVICE_ID = tm.getDeviceId();
         Log.e("111",DEVICE_ID);
-        volleyGet(context, wxno, wxid, headImgUrl,friendBean,userName,DEVICE_ID);
-
+        //获取当前app版本号与后台对比后台版本号大于本地app版本号时进行更新
+            //登录IM
+            volleyGet(context, wxno, wxid, headImgUrl,friendBean,userName,DEVICE_ID,VersionInfo.versionName);
 
     }
 
 
-    private void volleyGet(final Context context, final String wxno, final String wxid, String headImgUrl, final List<FriendBean> friendBean,String userName,String DEVICE_ID) {
-        String url = AppConfig.OUT_NETWORK + NetApi.imLogin+"?wxno="+wxno+"&"+"headImgUrl="+headImgUrl+"&"+"wxid="+wxid+"&"+"nickname="+userName+"&"+"jpush="+DEVICE_ID;
+    private void volleyGet(final Context context, final String wxno, final String wxid, String headImgUrl, final List<FriendBean> friendBean,String userName,String DEVICE_ID,String versionName) {
+        String url = AppConfig.OUT_NETWORK + NetApi.imLogin+"?wxno="+wxno+"&"+"headImgUrl="+headImgUrl+"&"+"wxid="+wxid+"&"+"nickname="+userName+"&"+"jpush="+DEVICE_ID+"&"+"versionName="+versionName;
         Log.e("111",url);
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 new com.android.volley.Response.Listener<String>() {
@@ -381,7 +383,7 @@ public class MsgReceiver extends BroadcastReceiver {
 
                     @Override
                     public void onSuccess() {//登录成功
-                        ToastUtil.showLongToast("腾讯IM登录成功" + AppConfig.getIdentifier());
+                        ToastUtil.showLongToast("链接服务器成功" + AppConfig.getIdentifier());
                         if (wxState!=null) {
                             wxState.setText("微信连接状态：true");
                         }
@@ -394,11 +396,11 @@ public class MsgReceiver extends BroadcastReceiver {
                     @Override
                     public void onError(int code, String desc) {//登录失败
                         if (wxState!=null) {
-                        wxState.setText("微信连接状态：true");
+                        wxState.setText("微信连接状态：false");
                         }
                         //错误码code和错误描述desc，可用于定位请求失败原因
                         //错误码code含义请参见错误码表
-                        ToastUtil.showLongToast("腾讯IM登录失败");
+                        ToastUtil.showLongToast("链接服务器失败");
                         Log.e("111",code+"_____"+desc);
                     }
                 });
@@ -484,14 +486,14 @@ public class MsgReceiver extends BroadcastReceiver {
 
 
                                     }catch (Exception e){
-                                        ToastUtil.showLongToast("IM发过来的数据格式有错"+e.toString());
+                                        ToastUtil.showLongToast("收到的数据格式有错"+e.toString());
                                     }
 
 
 
                                    // openWeiXinApp(context);
                                 }else{
-                                    ToastUtil.showLongToast("IM发过来的数据格式有错");
+                                    ToastUtil.showLongToast("收到的数据格式有错");
                                 }
                             }
                         }
