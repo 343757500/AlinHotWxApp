@@ -177,6 +177,9 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         setContentView(R.layout.activity_running);
 
 
+
+
+
         //设置极光推送的别名
         setTagAndAlias();
 

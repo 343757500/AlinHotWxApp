@@ -21,4 +21,7 @@ public class Constance {
     public static String dabase_cpRoute="dabase_cpRoute";
     public static String dabase_Password="dabase_Password";
     public static String dabase_cpPassword="dabase_cpPassword";
+
+    public static String action_toast="action_toast";
+    public static String str_toast="str_toast";
 }

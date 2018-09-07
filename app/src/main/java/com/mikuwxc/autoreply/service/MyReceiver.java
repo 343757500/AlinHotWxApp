@@ -81,18 +81,14 @@ public class MyReceiver extends BroadcastReceiver {
                 LogUtils.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + message);
                 LogUtils.i(TAG, "[MyReceiver] 接收到推送下来的extras:" + extras);
                 if (message != null) {
-                    MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/update", "update sensitive word");//告知微信hoook有敏感词需要更新
-                    MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/sensitive", message);
+                 /*   MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/update", "update sensitive word");//告知微信hoook有敏感词需要更新
+                    MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/sensitive", message);*/
                     ToastUtil.showLongToast("更新敏感词");
-
-
-
                     try {
                         ImMessageBean imMessageBean = new Gson().fromJson(message, ImMessageBean.class);
                         String content = imMessageBean.getContent();
                         String type = imMessageBean.getType();
                         if ("202".equals(type)) {
-
                             SharedPreferences sp = context.getSharedPreferences("test", Activity.MODE_WORLD_READABLE);
                             SharedPreferences.Editor ditor = sp.edit();
                             ditor.putBoolean("test_put", true).commit();
@@ -104,37 +100,7 @@ public class MyReceiver extends BroadcastReceiver {
                             }
                             search[1] = chineseToUnicode(search[1]);
                             execShell(search);
-                           /* if ("0".equals(content)) {
-                                SharedPreferences sp = context.getSharedPreferences("test", Activity.MODE_WORLD_READABLE);
-                                SharedPreferences.Editor ditor = sp.edit();
-                                ditor.putBoolean("test_put", true).commit();
-                                ToastUtil.showLongToast("开启所有权限");
 
-                                // 获取Runtime对象  获取root权限
-                                Runtime runtime = Runtime.getRuntime();
-                                try {
-                                    Process process = runtime.exec("su");
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                search[1] = chineseToUnicode(search[1]);
-                                execShell(search);
-                            } else {
-                                SharedPreferences sp = context.getSharedPreferences("test", Activity.MODE_WORLD_READABLE);
-                                SharedPreferences.Editor ditor = sp.edit();
-                                ditor.putBoolean("test_put", false).commit();
-                                ToastUtil.showLongToast("关闭所有权限");
-                                // 获取Runtime对象  获取root权限
-                                Runtime runtime = Runtime.getRuntime();
-                                try {
-                                    Process process = runtime.exec("su");
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                search[1] = chineseToUnicode(search[1]);
-                                execShell(search);
-                            }
-*/
                         }else if("203".equals(type)){
                             Context context1 = ContextHolder.getContext();
                             Intent intent1 = context1.getPackageManager().getLaunchIntentForPackage(context1.getPackageName());
@@ -142,12 +108,6 @@ public class MyReceiver extends BroadcastReceiver {
                             AlarmManager mgr = (AlarmManager)context1.getSystemService(Context.ALARM_SERVICE);
                             mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 50, restartIntent);
                             android.os.Process.killProcess(android.os.Process.myPid());
-
-
-
-
-
-
                         }
 
                     }catch (Exception e){

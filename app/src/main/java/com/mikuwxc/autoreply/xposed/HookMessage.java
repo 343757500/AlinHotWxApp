@@ -210,7 +210,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         synchronized (HookMessage.class) {
-                            if (RegularUtils.SENSITIVE_WORD == null) {
+                           /* if (RegularUtils.SENSITIVE_WORD == null) {
                                 RegularUtils.SENSITIVE_WORD = MyFileUtil.readFromFile(AppConfig.APP_FOLDER + "/sensitive");
                             } else {
                                 File updateFile = new File(AppConfig.APP_FOLDER + "/update");
@@ -218,7 +218,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                                     RegularUtils.SENSITIVE_WORD = MyFileUtil.readFromFile(AppConfig.APP_FOLDER + "/sensitive");
                                     updateFile.delete();
                                 }
-                            }
+                            }*/
                             String field_content = (String) getObjectField(param.thisObject, "field_content");
                             String field_username = (String) getObjectField(param.thisObject, "field_username");
                             String field_msgType = (String) getObjectField(param.thisObject, "field_msgType");//1:文字(status=6的时候是新的朋友); 3:图片 34:语音 42:个人名片 43:小视频 47:动图表情 48:发送位置 49:文章/文件 50:视频/语音聊天 10000:系统消息(被添加好友) -1879048186(负数):位置共享 436207665:红包  419430449:转账
@@ -886,14 +886,14 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
             XposedBridge.log("1111111111111111111111111111111111111111111111111111111111"+"收到的照片:" + imageRcvList.get(imageRcvList.size() - 1)+"____");
         }
         saveMessage(status, msgType, username, content, conversationTime, 0);
-        if (RegularUtils.SENSITIVE_WORD != null && status == 2) {
+       /* if (RegularUtils.SENSITIVE_WORD != null && status == 2) {
 //                                    LogUtils.i(TAG,"敏感词过滤:"+RegularUtils.SENSITIVE_WORD);
             boolean hasSensitive = RegularUtils.isMatchRegular(content, RegularUtils.SENSITIVE_WORD);
             if (hasSensitive) {
                 LogUtils.w(TAG, "含有敏感词:" + content);
                 sendNotice("信息含有敏感词,请留意");
             }
-        }
+        }*/
     }
 
     private void getVoiceMsg(int status, String content) {

@@ -17,6 +17,7 @@ import com.mikuwxc.autoreply.modle.FriendBean;
 import com.mikuwxc.autoreply.wcapi.WechatEntityFactory;
 import com.mikuwxc.autoreply.wcentity.UserEntity;
 import com.mikuwxc.autoreply.wcentity.WechatEntity;
+import com.mikuwxc.autoreply.wcutil.FriendUtil;
 import com.mikuwxc.autoreply.wcutil.MomentUtil;
 import com.mikuwxc.autoreply.wcutil.SendMesUtil;
 import com.mikuwxc.autoreply.wx.WechatDb;
@@ -63,8 +64,17 @@ public class MountReceiver extends XC_MethodHook {
             action_getWechatFriends(context,intent);
         }else if (action.equals(Constance.action_getWechatDb)){
             action_getWechatDb(context,intent);
+        }else if (action.equals(Constance.action_toast)){
+            action_toast(context,intent);
         }
     }
+
+
+    public void action_toast(Context context,Intent intent){
+        String str_toast = intent.getStringExtra(Constance.str_toast);
+        Toast.makeText(context,str_toast,Toast.LENGTH_SHORT).show();
+    }
+
 
 
     public void action_getWechatDb(Context context, Intent intent){
@@ -138,6 +148,11 @@ public class MountReceiver extends XC_MethodHook {
         final String circleText = intent.getStringExtra("circleText");
         final String fodderUrl = intent.getStringExtra("fodderUrl");
         String circleType = intent.getStringExtra("circleType");
+        String addWxid = intent.getStringExtra("addWxid");
+        String addMsg = intent.getStringExtra("addMsg");
+        String addType = intent.getStringExtra("addType");
+
+
         XposedBridge.log("circleText:"+circleText+"fodderUrl"+fodderUrl+"circleType"+circleType);
         XposedBridge.log(name+content+type+"--"+circleText+fodderUrl+circleType);
         if (name!=null) {
@@ -184,7 +199,19 @@ public class MountReceiver extends XC_MethodHook {
                     in.putExtra("momyType",content);
                     context.sendBroadcast(in);
 
+                }else if (type.equals("201")){   //201代表加好友
+                    if ("1".equals(addType)){   //1代表微信号加好友
+                        XposedBridge.log("addWxid"+addWxid+"addMsg"+addMsg);
+                        FriendUtil.searchFriend(classLoader,create,0,"",addWxid,"",15);
+          /*              FriendUtil.addFriendWithUpdateRemark(classLoader, create, "", "测试电话", "", 15);
+                        FriendUtil.addFriend12(classLoader,create,addWxid,addMsg,15);   //15 是通过手机号途径加好友  content代表微信号，circleText代表打招呼信息*/
+                        XposedBridge.log("addWxiddd"+addWxid+"addMsggg"+addMsg);
+
+                    }
+
                 }
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

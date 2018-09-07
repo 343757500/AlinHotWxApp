@@ -42,16 +42,24 @@ public class MyFileUtil {
             File file = new File(filePath);
             if (file.exists()) {
                 FileInputStream fis = new FileInputStream(file);
-                InputStreamReader isr = new InputStreamReader(fis, "utf-8");
-                char input[] = new char[fis.available()];
-                isr.read(input);
-                content = new String(input);
+              /*  InputStreamReader isr = new InputStreamReader(fis, "utf-8");*/
+                byte input[] = new byte[fis.available()];
+                fis.read(input);
+                fis.close();
+                //isr.close();
+
+                content = new String(input,"utf-8").replaceAll("\\s*", "");
                 LogUtils.w(TAG, "读取content:" + content);
             }
         } catch (Exception e) {
             LogUtils.e(TAG, "读取文件出错");
             e.printStackTrace();
         }
+
+
+
+
+
         return content;
     }
 

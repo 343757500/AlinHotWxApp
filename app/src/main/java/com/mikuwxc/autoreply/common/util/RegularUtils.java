@@ -2,6 +2,10 @@ package com.mikuwxc.autoreply.common.util;
 
 import android.util.Log;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +35,7 @@ public class RegularUtils {
     public static final String REGULAR_PASSWORD = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,20}$";//^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$    请填写8-20位数字加字母的密码组合
 
     public static String SENSITIVE_WORD = null;
+    public static String SENSITIVE_WORDVOISE = null;
 
     /**
      * 检查字符串是否符合规范
@@ -39,14 +44,26 @@ public class RegularUtils {
      * @param regular 规则
      * @return true or false
      */
-    public static boolean isMatchRegular(String input, String regular) {
+    public static String isMatchRegular(String input, String regular) {
         if (null == input || null == regular) {
             Log.i(RegularUtils.class.getSimpleName(), "传入了null值, 验证失败");
-            return false;
+            return null;
         }
         Pattern p = Pattern.compile(regular);
         Matcher m = p.matcher(input);
-        return m.matches();
+
+        Set<String> word = new HashSet<String>();
+        while(m.find()){
+//                                word.append(matcher.group()).append(",");
+            word.add(m.group());
+        }
+
+        if(word != null && !word.isEmpty()){
+            String sensitive = StringUtils.join(word, ",");
+            return sensitive;
+        }
+
+        return null;
     }
 
     public static boolean isContainChinese(String str) {

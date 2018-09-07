@@ -35,6 +35,7 @@ import com.mikuwxc.autoreply.common.util.Constants;
 import com.mikuwxc.autoreply.common.util.EventBusUtil;
 import com.mikuwxc.autoreply.common.util.LogUtils;
 import com.mikuwxc.autoreply.common.util.Logger;
+import com.mikuwxc.autoreply.common.util.MyFileUtil;
 import com.mikuwxc.autoreply.common.util.ToastUtil;
 import com.mikuwxc.autoreply.modle.C;
 import com.mikuwxc.autoreply.modle.Event;
@@ -43,6 +44,7 @@ import com.mikuwxc.autoreply.modle.HttpImeiBean;
 import com.mikuwxc.autoreply.modle.ImMessageBean;
 import com.mikuwxc.autoreply.presenter.tasks.AsyncFriendTask;
 import com.mikuwxc.autoreply.receiver.Constance;
+import com.mikuwxc.autoreply.wcentity.AddFriendEntity;
 import com.mikuwxc.autoreply.wcentity.CircleFriendEntity;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConversation;
@@ -89,14 +91,9 @@ public class MsgReceiver extends BroadcastReceiver {
     private String sig;
     private String id;
     private String sdkAppId;
-
-
     private final String SDcardPath = "/storage/emulated/0/JCM/";
     ArrayList<FriendBean> beanArrayList=new ArrayList<>();
     FriendBean friendBean;
-
-
-
     Handler handler=new Handler();
     Runnable runnable=new Runnable() {
         @Override
@@ -119,10 +116,6 @@ public class MsgReceiver extends BroadcastReceiver {
         }
     };
 
-
-
-
-
     private String[] search = {
             //  "input keyevent 3",// 返回到主界面，数值与按键的对应关系可查阅KeyEvent
             // "sleep 1",// 等待1秒
@@ -138,8 +131,6 @@ public class MsgReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-
         String action= intent.getAction();
         context1 = context;
      if(TextUtils.isEmpty(action))
@@ -149,7 +140,6 @@ public class MsgReceiver extends BroadcastReceiver {
 
      if(action.equals(Constance.action_getWechatFriends))
      {
-
        //  action_getWechatFriends(context,intent);
      }else if (action.equals(Constance.action_returnRoom)){
          String momyType = intent.getStringExtra("momyType");
@@ -168,7 +158,6 @@ public class MsgReceiver extends BroadcastReceiver {
             SharedPreferences.Editor ditor = sp.edit();
             ditor.putBoolean("moneyStaus_put",true).commit();
             ToastUtil.showLongToast("开启微信自动抢红包权限");
-
             // 获取Runtime对象  获取root权限
             Runtime runtime = Runtime.getRuntime();
             try {
@@ -176,7 +165,6 @@ public class MsgReceiver extends BroadcastReceiver {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             search[1] = chineseToUnicode(search[1]);
             execShell(search);
 
@@ -185,7 +173,6 @@ public class MsgReceiver extends BroadcastReceiver {
             SharedPreferences.Editor ditor = sp.edit();
             ditor.putBoolean("moneyStaus_put",false).commit();
             ToastUtil.showLongToast("关闭微信自动抢红包权限");
-
             // 获取Runtime对象  获取root权限
             Runtime runtime = Runtime.getRuntime();
             try {
@@ -193,7 +180,6 @@ public class MsgReceiver extends BroadcastReceiver {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             search[1] = chineseToUnicode(search[1]);
             execShell(search);
         }
@@ -214,17 +200,12 @@ public class MsgReceiver extends BroadcastReceiver {
         String headImgUrl = intent.getStringExtra("headImgUrl");
         String userName = intent.getStringExtra("userName");
         Toast.makeText(context,"连接中",Toast.LENGTH_LONG).show();
-
         String fileName = getFileName(dabase_Route);
-
-
         SQLiteDatabase.loadLibs(context);//引用SQLiteDatabase的方法之前必须先添加这句代码
-
         File file=new File(SDcardPath+"EnMicroMsglyNew"+dabase_Password+".db");
         if (file.exists()){
             file.delete();
         }
-
         //解密复制出来的微信数据库得到没密码的数据库方便操作
         String friendList=decrypt(fileName,"EnMicroMsglyNew"+dabase_Password+".db",dabase_Password,context);
         if (friendList!=null){
@@ -264,30 +245,32 @@ public class MsgReceiver extends BroadcastReceiver {
                             sig = imLoginBean.getResult().getSig();
                             id = imLoginBean.getResult().getRelationId();
                             sdkAppId = imLoginBean.getResult().getSdkAppId();
-
+                            String wordsIntercept = imLoginBean.getResult().getWordsIntercept();
+                            String wordsNotice = imLoginBean.getResult().getWordsNotice();
+                            if (wordsIntercept!=null){
+                                MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/updateIntercept", "updateIntercept sensitive word");//告知微信hoook有敏感词需要更新
+                                MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/sensitiveIntercept", wordsIntercept);
+                            }
+                            if (wordsNotice!=null){
+                                MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/updateNotice", "updateNotice sensitive word");//告知微信hoook有敏感词需要更新
+                                MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/sensitiveNotice", wordsNotice);
+                            }
                             initDataLogin(imLoginBean);
                             initTMConfig(context);
                             loginIM(context);
                             //登陆IM成功再同步好友
                             AsyncFriendTask.sendFriendList(wxno, friendBean, false);
-
                             SharedPreferences sp = context.getSharedPreferences("test", Activity.MODE_WORLD_READABLE);
                             SharedPreferences.Editor ditor = sp.edit();
                             ditor.putBoolean("test_put",true).commit();
                             ToastUtil.showLongToast("开启所有权限");
-
                             handlerAlive.postDelayed(runnableAlive, 10000);//每两秒执行一次runnable.
-
-
-
                         }else {
                             //ToastUtil.showShortToast("登录IM此帐号不能授权");
-
                             SharedPreferences sp = context.getSharedPreferences("test", Activity.MODE_WORLD_READABLE);
                             SharedPreferences.Editor ditor = sp.edit();
                             ditor.putBoolean("test_put",false).commit();
                             ToastUtil.showLongToast("关闭所有权限");
-
                            //移除定时保活功能
                             handlerAlive.removeCallbacks(runnableAlive);
                            // handlerAlive.removeMessages(0);
@@ -383,14 +366,13 @@ public class MsgReceiver extends BroadcastReceiver {
 
                     @Override
                     public void onSuccess() {//登录成功
-                        ToastUtil.showLongToast("链接服务器成功" + AppConfig.getIdentifier());
+                        ToastUtil.showLongToast("连接服务器成功" + AppConfig.getIdentifier());
                         if (wxState!=null) {
                             wxState.setText("微信连接状态：true");
                         }
                         NewMessageListener(context);
                         handler.postDelayed(runnable, 20000);//每两秒执行一次runnable.
                         sendMsg();
-
                     }
 
                     @Override
@@ -400,13 +382,10 @@ public class MsgReceiver extends BroadcastReceiver {
                         }
                         //错误码code和错误描述desc，可用于定位请求失败原因
                         //错误码code含义请参见错误码表
-                        ToastUtil.showLongToast("链接服务器失败");
+                        ToastUtil.showLongToast("连接服务器失败");
                         Log.e("111",code+"_____"+desc);
                     }
                 });
-
-
-
     }
 
 
@@ -416,11 +395,9 @@ public class MsgReceiver extends BroadcastReceiver {
         TIMManager.getInstance().addMessageListener(new TIMMessageListener() {//消息监听器
             @Override
             public boolean onNewMessages(List<TIMMessage> list) {//收到新消息
-
                 TIMMessage msg = list.get(0);
                 for (int i = 0; i < msg.getElementCount(); ++i) {
                     TIMElem elem = msg.getElement(i);
-
                     //获取当前元素的类型
                     TIMElemType elemType = elem.getType();
                     Log.d("111", "elem type: " + elemType.name());
@@ -432,15 +409,11 @@ public class MsgReceiver extends BroadcastReceiver {
                         if (!msg.isSelf()) {
                             if (!TextUtils.isEmpty(textElem.getText().replaceAll("&quot;", "\""))) {
                                 Logger.d("收到消息了。。。。。" + textElem.getText().replaceAll("&quot;", "\""));
-
                                 if (textElem.getText().contains("wxno")) {
                                     try {
                                         ImMessageBean messageBean = new Gson().fromJson(textElem.getText().replaceAll("&quot;", "\""), ImMessageBean.class);
-
                                         //ToastUtil.showLongToast("消息发送人: " + messageBean.getWxid() + "  消息内容: " + messageBean.getContent());
                                         EventBusUtil.sendEvent(new Event(C.EventCode.A, messageBean));
-
-
                                         Intent intent=new Intent();
                                         String type = messageBean.getType();
                                         if (type.equals("200")){
@@ -474,6 +447,23 @@ public class MsgReceiver extends BroadcastReceiver {
                                             intent.setClassName(Constance.packageName_wechat,Constance.receiver_wechat);
                                             context.sendBroadcast(intent);
                                           //  Toast.makeText(context,"发送广播朋友圈:"+Constance.action_getWechatFriends,Toast.LENGTH_LONG).show();
+                                        }else if (type.equals("201")){   //加好友的type
+                                            AddFriendEntity addFriendEntity = new Gson().fromJson(messageBean.getContent(), AddFriendEntity.class);
+                                            String addType = addFriendEntity.getType();
+                                            Toast.makeText(context,addType+"343757500",Toast.LENGTH_LONG).show();
+                                            if ("1".equals(addType)){  //根据微信号加好友 addtype为1
+                                                String addWxid = addFriendEntity.getAddNo();
+                                                String addMsg = addFriendEntity.getMsg();
+                                                intent.putExtra("name",messageBean.getWxid());
+                                                intent.putExtra("type",type);
+                                                intent.putExtra("addWxid",addWxid);
+                                                intent.putExtra("addMsg",addMsg);
+                                                intent.putExtra("addType",addType);
+                                            }
+                                            intent.setAction(Constance.action_getWechatFriends);
+                                            intent.setClassName(Constance.packageName_wechat,Constance.receiver_wechat);
+                                            context.sendBroadcast(intent);
+
                                         }else{
                                             intent.putExtra("name",messageBean.getWxid());
                                             intent.putExtra("content",messageBean.getContent());
@@ -483,15 +473,9 @@ public class MsgReceiver extends BroadcastReceiver {
                                             context.sendBroadcast(intent);
                                           //  Toast.makeText(context,"发送广播聊天:"+Constance.action_getWechatFriends,Toast.LENGTH_LONG).show();
                                         }
-
-
                                     }catch (Exception e){
                                         ToastUtil.showLongToast("收到的数据格式有错"+e.toString());
                                     }
-
-
-
-                                   // openWeiXinApp(context);
                                 }else{
                                     ToastUtil.showLongToast("收到的数据格式有错");
                                 }
@@ -508,23 +492,6 @@ public class MsgReceiver extends BroadcastReceiver {
         });
     }
 
-    /**
-     * 打开微信
-     */
-    private void openWeiXinApp(Context context) {
-        try {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            ComponentName cmp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI");
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setComponent(cmp);
-            context.startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            // TODO: handle exception
-            ToastUtil.showLongToast("检查到您手机没有安装微信，请安装后使用该功能");
-        }
-
-    }
 
     private void sendMsg() {
         //获取单聊会话
@@ -533,20 +500,16 @@ public class MsgReceiver extends BroadcastReceiver {
         TIMConversation conversation = TIMManager.getInstance().getConversation(
                 TIMConversationType.C2C,    //会话类型：单聊
                 peer);                      //会话对方用户帐号//对方id
-
         //构造一条消息
         TIMMessage msg = new TIMMessage();
-
         //添加文本内容
         TIMTextElem elem = new TIMTextElem();
         elem.setText("大雄 发的第2条消息");
-
         //将elem添加到消息
         if (msg.addElement(elem) != 0) {
             Log.d("111", "addElement failed");
             return;
         }
-
         //发送消息
         conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {//发送消息回调
             @Override
@@ -564,8 +527,6 @@ public class MsgReceiver extends BroadcastReceiver {
         });
     }
 
-
-
     //截取文件名
     public String getFileName(String pathandname){
 
@@ -578,8 +539,6 @@ public class MsgReceiver extends BroadcastReceiver {
 
     }
 
-
-
     /**
      * 解密数据库
      * @param encryptedName 要解密的数据库名称
@@ -589,9 +548,6 @@ public class MsgReceiver extends BroadcastReceiver {
     private String decrypt(String encryptedName,String decryptedName,String key,Context context) {
         try {
             File databaseFile = context.getDatabasePath(SDcardPath + encryptedName);
-
-
-
             SQLiteDatabaseHook hook = new SQLiteDatabaseHook(){
                 public void preKey(SQLiteDatabase database){
                 }
@@ -599,7 +555,6 @@ public class MsgReceiver extends BroadcastReceiver {
                     database.rawExecSQL("PRAGMA cipher_migrate;");  //最关键的一句！！！  因为微信的版本较低，不加会兼容不了微信数据库
                 }
             };
-
             SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase(databaseFile, key, null,hook);
             Cursor c = database.query("rcontact", null, null, null, null, null, null);
             while (c.moveToNext()) {
@@ -607,7 +562,6 @@ public class MsgReceiver extends BroadcastReceiver {
                 String alias = c.getString(c.getColumnIndex("alias"));
                 String username = c.getString(c.getColumnIndex("username"));
                 String conRemark = c.getString(c.getColumnIndex("conRemark"));
-
                 friendBean=new FriendBean();
                 Cursor s = database.query("img_flag", new String[]{"reserved1"}, "username=?",  new String[]{username}, null, null, null);
                 while (s.moveToNext()) {
@@ -616,8 +570,6 @@ public class MsgReceiver extends BroadcastReceiver {
                         friendBean.setHeadImgUrl(HeadImgUrl);
                     }
                 }
-
-
                 friendBean.setNickname(nickname);
                 friendBean.setWxid(username);
                 friendBean.setRemarkname(conRemark);
@@ -627,19 +579,13 @@ public class MsgReceiver extends BroadcastReceiver {
                 }else{
                     friendBean.setWxno(alias);
                 }
-
                 beanArrayList.add(friendBean);
-
             }
             c.close();
-
             String s = JSON.toJSONString(beanArrayList);
             Log.e("111",s);
-
             File decrypteddatabaseFile = context.getDatabasePath(SDcardPath + decryptedName);
-
             //deleteDatabase(SDcardPath + decryptedName);
-
             //连接到解密后的数据库，并设置密码为空
             database.rawExecSQL(String.format("ATTACH DATABASE '%s' as "+ decryptedName.split("\\.")[0] +" KEY '';", decrypteddatabaseFile.getAbsolutePath()));
             database.rawExecSQL("SELECT sqlcipher_export('"+ decryptedName.split("\\.")[0] +"');");
@@ -653,10 +599,6 @@ public class MsgReceiver extends BroadcastReceiver {
             e.printStackTrace();
             return null;
         }
-
-
-
-
     }
 
     public String chineseToUnicode(String str){
@@ -672,7 +614,6 @@ public class MsgReceiver extends BroadcastReceiver {
         return result;
     }
 
-
     /**
      30      * 执行Shell命令
      31      *
@@ -682,7 +623,6 @@ public class MsgReceiver extends BroadcastReceiver {
     public void execShell(String[] commands) {
         // 获取Runtime对象
         Runtime runtime = Runtime.getRuntime();
-
         DataOutputStream os = null;
         try {
             // 获取root权限
@@ -716,12 +656,10 @@ public class MsgReceiver extends BroadcastReceiver {
                         Log.e("111", "保活信息成功:");
                     } else {
                         Log.e("111", "保活信息失败:");
-
                         SharedPreferences sp = context.getSharedPreferences("test", Activity.MODE_WORLD_READABLE);
                         SharedPreferences.Editor ditor = sp.edit();
                         ditor.putBoolean("test_put",false).commit();
                         ToastUtil.showLongToast("关闭所有权限");
-
                         //移除定时保活功能
                         handlerAlive.removeCallbacks(runnableAlive);
                         search[1] = chineseToUnicode(search[1]);
@@ -731,9 +669,7 @@ public class MsgReceiver extends BroadcastReceiver {
                     e.printStackTrace();
                     Log.e("111", "保活信息失败:" + e.toString());
                 }
-
             }
-
             @Override
             public void onError(Call call, okhttp3.Response response, Exception e) {
                 super.onError(call, response, e);

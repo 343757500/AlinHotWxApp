@@ -14,6 +14,9 @@ public class ImLoginBean {
     private boolean success;
     private ResultBean result;
 
+
+
+
     public boolean isLuckPackage() {
         return luckPackage;
     }
@@ -76,6 +79,26 @@ public class ImLoginBean {
         private String type;
         private long createTime;
         private String id;
+        private String wordsNotice; //通知敏感词
+        private String wordsIntercept; //拦截
+
+        public String getWordsNotice() {
+            return wordsNotice;
+        }
+
+        public void setWordsNotice(String wordsNotice) {
+            this.wordsNotice = wordsNotice;
+        }
+
+        public String getWordsIntercept() {
+            return wordsIntercept;
+        }
+
+        public void setWordsIntercept(String wordsIntercept) {
+            this.wordsIntercept = wordsIntercept;
+        }
+
+
 
         public String getRelationId() {
             return relationId;
