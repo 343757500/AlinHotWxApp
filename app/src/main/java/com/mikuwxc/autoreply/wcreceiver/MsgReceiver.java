@@ -75,6 +75,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import okhttp3.Call;
@@ -464,7 +465,29 @@ public class MsgReceiver extends BroadcastReceiver {
                                             intent.setClassName(Constance.packageName_wechat,Constance.receiver_wechat);
                                             context.sendBroadcast(intent);
 
-                                        }else{
+                                        }else if ("205".equals(type)){  //敏感词写在本地
+                                            Toast.makeText(context,"敏感词更新",Toast.LENGTH_SHORT).show();
+                                            Map<String, Object> imLoginBean = new Gson().fromJson(messageBean.getContent(), new TypeToken<Map<String, Object>>(){}.getType());
+                                                String wordsIntercept = (String) imLoginBean.get("wordsIntercept");
+                                                String wordsNotice = (String) imLoginBean.get("wordsNotice");
+                                                if (wordsIntercept != null) {
+                                                    MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/updateIntercept", "updateIntercept sensitive word");//告知微信hoook有敏感词需要更新
+                                                    MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/sensitiveIntercept", wordsIntercept);
+                                                }
+                                                if (wordsNotice != null) {
+                                                    MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/updateNotice", "updateNotice sensitive word");//告知微信hoook有敏感词需要更新
+                                                    MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/sensitiveNotice", wordsNotice);
+                                                }
+                                        }else if ("101".equals(type)){
+
+                                            String deleFriend = messageBean.getContent();
+                                            intent.putExtra("deleFriend", deleFriend);
+                                            intent.putExtra("type",type);
+                                            intent.putExtra("name",messageBean.getWxid());
+                                            intent.setAction(Constance.action_getWechatFriends);
+                                            intent.setClassName(Constance.packageName_wechat,Constance.receiver_wechat);
+                                            context.sendBroadcast(intent);
+                                        } else{
                                             intent.putExtra("name",messageBean.getWxid());
                                             intent.putExtra("content",messageBean.getContent());
                                             intent.putExtra("type",type);

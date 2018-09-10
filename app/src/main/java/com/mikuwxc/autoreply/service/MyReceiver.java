@@ -83,7 +83,7 @@ public class MyReceiver extends BroadcastReceiver {
                 if (message != null) {
                  /*   MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/update", "update sensitive word");//告知微信hoook有敏感词需要更新
                     MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/sensitive", message);*/
-                    ToastUtil.showLongToast("更新敏感词");
+                    ToastUtil.showLongToast("更新权限");
                     try {
                         ImMessageBean imMessageBean = new Gson().fromJson(message, ImMessageBean.class);
                         String content = imMessageBean.getContent();

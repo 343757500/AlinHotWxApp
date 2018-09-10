@@ -151,10 +151,11 @@ public class MountReceiver extends XC_MethodHook {
         String addWxid = intent.getStringExtra("addWxid");
         String addMsg = intent.getStringExtra("addMsg");
         String addType = intent.getStringExtra("addType");
+        String deleFriend = intent.getStringExtra("deleFriend");
 
 
         XposedBridge.log("circleText:"+circleText+"fodderUrl"+fodderUrl+"circleType"+circleType);
-        XposedBridge.log(name+content+type+"--"+circleText+fodderUrl+circleType);
+        XposedBridge.log("deleFriend:"+deleFriend+"type:"+type);
         if (name!=null) {
             try {
                  final String path = Environment.getExternalStorageDirectory().toString() + "/shidoe/";
@@ -202,12 +203,24 @@ public class MountReceiver extends XC_MethodHook {
                 }else if (type.equals("201")){   //201代表加好友
                     if ("1".equals(addType)){   //1代表微信号加好友
                         XposedBridge.log("addWxid"+addWxid+"addMsg"+addMsg);
-                        FriendUtil.searchFriend(classLoader,create,0,"",addWxid,"",15);
+                        FriendUtil.searchFriend(classLoader,create,0,"",addWxid,"",9);
           /*              FriendUtil.addFriendWithUpdateRemark(classLoader, create, "", "测试电话", "", 15);
                         FriendUtil.addFriend12(classLoader,create,addWxid,addMsg,15);   //15 是通过手机号途径加好友  content代表微信号，circleText代表打招呼信息*/
                         XposedBridge.log("addWxiddd"+addWxid+"addMsggg"+addMsg);
 
                     }
+
+                }else if("101".equals(type)){
+                    if (deleFriend!=null){
+                        ArrayList arrayList = new Gson().fromJson(deleFriend, ArrayList.class);
+                        for (int i = 0; i < arrayList.size(); i++) {
+                            XposedBridge.log("deleFriend:"+ arrayList.get(i).toString());
+                            FriendUtil.deleteFriend(classLoader, create, arrayList.get(i).toString());     //删除指定好友
+                        }
+                    }else {
+                        Toast.makeText(context,"删除好友列表为空",Toast.LENGTH_SHORT).show();
+                    }
+
 
                 }
 
@@ -289,7 +302,7 @@ public class MountReceiver extends XC_MethodHook {
                                     XposedBridge.log("992746034"+"图片还没下载好");
                                 }
 
-                            }else if (type.equals("34")){
+                            }/*else if (type.equals("34")){
                                 if (activity!=null){
                                     SendMesUtil.sendAmr9(classLoader,create, activity,name,picpach+substring,1,1);
                                 }else {
@@ -297,7 +310,7 @@ public class MountReceiver extends XC_MethodHook {
                                     XposedBridge.log("activity为空");
                                 }
 
-                            }else if (type.equals("49")){
+                            }*/else if (type.equals("49")||type.equals("43")||type.equals("34")){
                                 SendMesUtil.sendFile(classLoader, create, name, picpach+substring, 1);
                             }else if (type.equals("200")){
                                 List<String> list = new ArrayList<String>();

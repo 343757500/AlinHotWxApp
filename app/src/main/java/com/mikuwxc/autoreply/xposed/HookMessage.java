@@ -295,16 +295,16 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                             if (newVoisePath!=null&&field_msgType.equals("34")&&newVoiseNull==null&&status.equals("1")&&(field_conversationTime + "").length() != 19 && field_status != 1){
                                 XposedBridge.log("上传自己发送的语音文件");
 
-                                String newVoisePathUrl = uploadAmr(newVoisePath,field_username,"Send");
+                                String newVoisePathUrl = uploadAmr(newVoisePath,field_username,"Send",field_unReadCount, field_status, field_username, field_msgType, field_conversationTime);
                                 XposedBridge.log("$$$$$$$$$"+newVoisePathUrl);
-                                handleMessage(field_unReadCount, field_status, field_username, newVoisePathUrl, field_msgType, field_conversationTime);
+                                //handleMessage(field_unReadCount, field_status, field_username, newVoisePathUrl, field_msgType, field_conversationTime);
                                 XposedBridge.log("$$$$$$$$$同步自己发送的语音文件成功");
                                 newVoiseNull=newVoisePath;
                             }else if(newVoisePath!=null&&field_msgType.equals("34")&&newVoiseNull==null&&status.equals("3")&&(field_conversationTime + "").length() != 19 && field_status != 1){
                                 XposedBridge.log("上传接收到的语音文件");
-                               String newVoisePathUrl= uploadAmr(newVoisePath,field_username,"Receive");
+                               String newVoisePathUrl= uploadAmr(newVoisePath,field_username,"Receive",field_unReadCount, field_status, field_username, field_msgType, field_conversationTime);
                                XposedBridge.log("$$$$$$$$$"+newVoisePathUrl);
-                                handleMessage(field_unReadCount, field_status, field_username, newVoisePathUrl, field_msgType, field_conversationTime);
+                                //handleMessage(field_unReadCount, field_status, field_username, newVoisePathUrl, field_msgType, field_conversationTime);
                                 XposedBridge.log("$$$$$$$$$同步接收到的语音文件成功");
                                 newVoiseNull=newVoisePath;
                             }
@@ -349,10 +349,10 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                                 File file=new File(sendFilePath);
                                 if (file.exists()){
                                     XposedBridge.log("上传自己发送的File文件");
-                                    String newFilePathUrl= uploadFile(sendFilePath,field_username,"Send");
+                                    String newFilePathUrl= uploadFile(sendFilePath,field_username,"Send",field_unReadCount, field_status, field_username, field_msgType, field_conversationTime);
                                     XposedBridge.log("$$$$$$$$$"+newFilePathUrl);
 
-                                    handleMessage(field_unReadCount, field_status, field_username, newFilePathUrl, field_msgType, field_conversationTime);
+                                    //handleMessage(field_unReadCount, field_status, field_username, newFilePathUrl, field_msgType, field_conversationTime);
                                     XposedBridge.log("$$$$$$$$$同步接收到的File成功");
                                 }else{
                                     XposedBridge.log("接收到的自己发送的File文件为空");
@@ -365,10 +365,10 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                                 File file=new File(newFilePath);
                                 if (file.exists()){
                                     XposedBridge.log("上传接收到的File文件");
-                                    String newFilePathUrl= uploadFile(newFilePath,field_username,"Receive");
+                                    String newFilePathUrl= uploadFile(newFilePath,field_username,"Receive",field_unReadCount, field_status, field_username, field_msgType, field_conversationTime);
                                     XposedBridge.log("$$$$$$$$$"+newFilePathUrl);
 
-                                    handleMessage(field_unReadCount, field_status, field_username, newFilePathUrl, field_msgType, field_conversationTime);
+                                   // handleMessage(field_unReadCount, field_status, field_username, newFilePathUrl, field_msgType, field_conversationTime);
                                     XposedBridge.log("$$$$$$$$$同步接收到的File成功");
 
                                 }else{
@@ -463,14 +463,15 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
     }
 
 
-    private String uploadFile(String newFilePath, String username, String sign) {
+    private String uploadFile(String newFilePath, final String username, final String sign, final int field_unReadCount,
+                              final int field_status, final String field_username, final String field_msgType, final long field_conversationTime) {
         File temp = null;
         temp = new File(newFilePath);
         final Map<String, Object> paramsMap = new HashMap<>();
         //上传又拍云的命名空间
         paramsMap.put(Params.BUCKET, "cloned");
 
-        String newFileLast = newFilePath.substring(newFilePath.lastIndexOf("/")+1);
+        final String newFileLast = newFilePath.substring(newFilePath.lastIndexOf("/")+1);
         //又拍云的保存路径，任选其中一个
         savePath="/fileforapp/"+username+"/"+sign+"/{year}{mon}{day}/"+newFileLast;
 
@@ -493,17 +494,21 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                 // textView.setText(isSuccess + ":" + result);
                 Log.e(TAG, isSuccess + ":" + result);
                 XposedBridge.log(isSuccess + ":" + result);
+
+
+                SimpleDateFormat formatter = new SimpleDateFormat ("yyyyMMdd");
+                Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+                String str = formatter.format(curDate);
+                String newSavePath=AppConfig.YOUPAIYUN+"/fileforapp/"+username+"/"+sign+"/"+str+"/"+newFileLast;
+                handleMessage(field_unReadCount, field_status, field_username, newSavePath, field_msgType, field_conversationTime);
             }
         };
 
         //表单上传（本地签名方式）
         UploadEngine.getInstance().formUpload(temp,paramsMap , "unesmall",UpYunUtils.md5("unesmall123456"), completeListener, progressListener);
 
-        SimpleDateFormat formatter = new SimpleDateFormat ("yyyyMMdd");
-        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
-        String str = formatter.format(curDate);
-        String newSavePath=AppConfig.YOUPAIYUN+"/fileforapp/"+username+"/"+sign+"/"+str+"/"+newFileLast;
-        return newSavePath;
+
+        return "";
     }
 
 
@@ -512,7 +517,8 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
 
 
     //上传又拍云语音文件
-    private String uploadAmr(String amrPath,String username,String sign) {
+    private String uploadAmr(String amrPath, final String username, final String sign, final int field_unReadCount,
+                             final int field_status, final String field_username, final String field_msgType, final long field_conversationTime) {
         File temp = null;
         temp = new File(amrPath);
         final Map<String, Object> paramsMap = new HashMap<>();
@@ -520,7 +526,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
         paramsMap.put(Params.BUCKET, "cloned");
 
 
-        String newArmLast = amrPath.substring(amrPath.lastIndexOf("/")+1);
+        final String newArmLast = amrPath.substring(amrPath.lastIndexOf("/")+1);
         //又拍云的保存路径，任选其中一个
         savePath="/amrforapp/"+username+"/"+sign+"/{year}{mon}{day}/"+newArmLast;
 
@@ -546,18 +552,24 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                 // textView.setText(isSuccess + ":" + result);
                 Log.e(TAG, isSuccess + ":" + result);
                 XposedBridge.log(isSuccess + ":" + result);
+
+                SimpleDateFormat formatter = new SimpleDateFormat ("yyyyMMdd");
+                Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+                String str = formatter.format(curDate);
+                String newSavePath=AppConfig.YOUPAIYUN+"/amrforapp/"+username+"/"+sign+"/"+str+"/"+newArmLast;
+
+                XposedBridge.log("$$$$$$$$$"+newSavePath);
+                handleMessage(field_unReadCount, field_status, field_username, newSavePath, field_msgType, field_conversationTime);
+                XposedBridge.log("$$$$$$$$$同步上传自己发送的成功");
             }
         };
 
         //表单上传（本地签名方式）
         UploadEngine.getInstance().formUpload(temp,paramsMap , "unesmall",UpYunUtils.md5("unesmall123456"), completeListener, progressListener);
 
-        SimpleDateFormat formatter = new SimpleDateFormat ("yyyyMMdd");
-        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
-        String str = formatter.format(curDate);
-        String newSavePath=AppConfig.YOUPAIYUN+"/amrforapp/"+username+"/"+sign+"/"+str+"/"+newArmLast;
 
-        return newSavePath;
+
+        return "";
     }
 
     //上传自己发送的视频

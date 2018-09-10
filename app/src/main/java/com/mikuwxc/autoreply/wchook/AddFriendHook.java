@@ -22,8 +22,9 @@ public class AddFriendHook {
 
                        String addContent = MyFileUtil.readFromFile(AppConfig.APP_ADD);
                        if (addContent!=null) {
-                           FriendUtil.addFriend11(wxClassLoader, wechatEntity, addContent, "ppp", 15);   //15 是通过微信号加好友*/
-                           XposedBridge.log("addFriend11" + "");
+                           FriendUtil.addFriendWithUpdateRemark(wxClassLoader, wechatEntity, addContent, addContent, "", 9);
+                           FriendUtil.addFriend11(wxClassLoader, wechatEntity, addContent, "ppp", 9);   //15 是通过微信号加好友*/
+                           XposedBridge.log("addFriend11" + addContent);
                        }else {
                            XposedBridge.log("addContent11内存中的为空" + "");
                        }
@@ -40,8 +41,8 @@ public class AddFriendHook {
                             XposedBridge.log("222");
                             String addContent = MyFileUtil.readFromFile(AppConfig.APP_ADD);
                             if (addContent!=null) {
-                                FriendUtil.addFriend12(wxClassLoader, wechatEntity, addContent, "你好", 15);   //15 是通过微信号加好友*/
-                                XposedBridge.log("addFriend12" + "");
+                                FriendUtil.addFriend12(wxClassLoader, wechatEntity, addContent, "你好", 9);   //15 是通过微信号加好友*/
+                                XposedBridge.log("addFriend12" + addContent);
                             }else {
                                 XposedBridge.log("addContent12内存中的为空" + "");
                             }
