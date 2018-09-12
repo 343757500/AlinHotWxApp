@@ -66,6 +66,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -392,7 +393,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                             if ((field_conversationTime + "").length() == 19 || field_status == 1) {
                                 return;
                             }
-                            if (list_msg.size() == 0&&!field_msgType.equals("34")&&!field_msgType.equals("43")&&!field_msgType.equals("3")&&!field_msgType.equals("49")&&!field_msgType.equals("10000")&&!field_msgType.equals("419430449")/*&&!field_msgType.equals("436207665")*/) {
+                            if (list_msg.size() == 0&&!field_msgType.equals("34")&&!field_msgType.equals("43")&&!field_msgType.equals("3")&&!field_msgType.equals("49")&&!field_msgType.equals("10000")&&!field_msgType.equals("419430449")&&!field_msgType.equals("1")) {
                                 handleMessage(field_unReadCount, field_status, field_username, field_content, field_msgType, field_conversationTime);
                             } else {
                                 //对比之前的信息
@@ -403,7 +404,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                                         return;
                                     }
                                 }
-                                if (!isSaved&&!field_msgType.equals("34")&&!field_msgType.equals("43")&&!field_msgType.equals("3")&&!field_msgType.equals("49")&&!field_msgType.equals("10000")&&!field_msgType.equals("419430449")/*&&!field_msgType.equals("436207665")*/) {
+                                if (!isSaved&&!field_msgType.equals("34")&&!field_msgType.equals("43")&&!field_msgType.equals("3")&&!field_msgType.equals("49")&&!field_msgType.equals("10000")&&!field_msgType.equals("419430449")&&!field_msgType.equals("1")) {
                                     if (list_msg.size() > 2000 && errorStartIndex == -1) {//以防信息太多导致遍历需时长,在没error的时候清零
                                         list_msg = new ArrayList<>();
                                     }
@@ -661,7 +662,17 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                         handleMessage(0, 0, "", autoVerifyUser, "103", 0);
 
 
-                        FriendUtil.autoVerifyUser3(classLoader, paramWechatEntity, localContentValues.getAsString("talker"), autoVerifyAllEntity.getMsg().getTicket(), Integer.parseInt(autoVerifyAllEntity.getMsg().getScene()));
+                        XSharedPreferences moneyStaus = new XSharedPreferences("com.mikuwxc.autoreply", "verifyStaus");
+                        boolean verifyStaus_put = moneyStaus.getBoolean("verifyStaus_put", true);
+                        if (verifyStaus_put){
+                            //自动抢红包
+                             FriendUtil.autoVerifyUser3(classLoader, paramWechatEntity, localContentValues.getAsString("talker"), autoVerifyAllEntity.getMsg().getTicket(), Integer.parseInt(autoVerifyAllEntity.getMsg().getScene()));
+                            XposedBridge.log("自动通过好友开启");
+                        }else{
+                            XposedBridge.log("自动通过好友关闭");
+                        }
+
+
                         UserEntity userEntity = WechatDb.getInstance().selectSelf();
                         String userName = userEntity.getUserName();
                         String userTalker = userEntity.getUserTalker();
@@ -847,6 +858,26 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                     if (((String)paramAnonymousMethodHookParam.args[0]).equals("message"))
                     {
                         localContentValues = (ContentValues)paramAnonymousMethodHookParam.args[2];
+                        XposedBridge.log("111111111111111111111111"+ localContentValues.toString());
+
+                        String type=localContentValues.getAsString("type");
+                        XposedBridge.log("type:"+type);
+                        long field_conversationTime =Long.parseLong(localContentValues.getAsString("createTime"));
+                        XposedBridge.log("field_conversationTime:"+field_conversationTime);
+                        String content =localContentValues.getAsString("content");
+                        XposedBridge.log("content:"+content);
+                        String talker =localContentValues.getAsString("talker");
+                        XposedBridge.log("talker:"+talker);
+                        int statuss =Integer.parseInt(localContentValues.getAsString("status"));
+                        XposedBridge.log("statuss:"+statuss);
+                        if ("1".equals(type)){
+                            XposedBridge.log("handleMessage::::::::::::::");
+                            handleMessage(0, statuss, talker, content, type, field_conversationTime);
+                        }
+
+
+
+
                         XposedBridge.log("=====insertWithOnConflict beforeHookedMethod[%s]"+ new Object[] { localContentValues.toString() });
                         XposedBridge.log("111111111111111111111111"+ localContentValues.toString());
                         String paramAnonymousMethodHookParam1 = localContentValues.getAsString("type");
@@ -881,6 +912,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                 }
                 catch (Exception e)
                 {
+                    XposedBridge.log("ee:"+e.toString());
                 }
             }
         } });

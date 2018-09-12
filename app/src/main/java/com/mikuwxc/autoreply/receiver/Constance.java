@@ -11,8 +11,10 @@ public class Constance {
     public static String action_getWechatFriends="action_getWechatFriends";
     public static String extral_result="extral_result";
 
-    public static String action_returnRoom="action_returnRoom";
+    public static String action_returnRoom="action_returnRoom";    //是否自己动收红包
     public static String text="text";
+
+    public static String action_verify_friend="action_verify_friend";  //是否自动通过好友
 
 
     public static String action_getWechatDb="action_getWechatDb";

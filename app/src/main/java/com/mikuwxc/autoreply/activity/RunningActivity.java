@@ -168,6 +168,8 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
     private EditText et_ip;
     private Object appVersionName;
     private TextView tvVersion;
+    public static TextView tv3;
+    public static TextView tv2;
 
 
     @Override
@@ -208,6 +210,8 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         bindInfo = (TextView) findViewById(R.id.bindInfo);
         startChat = (Button) findViewById(R.id.startChat);
         wxState = (TextView) findViewById(R.id.wxState);
+        tv2 = (TextView) findViewById(R.id.tv2);  //Xpose连接状态
+        tv3 = (TextView) findViewById(R.id.tv3);  //服务器连接状态
         tvVersion = (TextView) findViewById(R.id.tvVersion);
         et_ip = (EditText) findViewById(R.id.et_ip);
 
@@ -337,6 +341,7 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
 
         //获取app版本
         getAppVersionName();
+
     }
 
     private void getNewss() {
@@ -1917,4 +1922,12 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
            /* tvVersion.setText("当前软件版本："+ VersionInfo.versionName+"----");
             ToastUtil.showLongToast(VersionInfo.versionName+"");*/
     }
+
+
+    //检验Xpose是否勾上
+    public void  isModuleActive(String s) {
+
+        tv2.setText(s);
+    }
+
 }

@@ -73,7 +73,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -149,10 +151,58 @@ public class MsgReceiver extends BroadcastReceiver {
          action_returnRooms(context,momyType);
      }else if (action.equals(Constance.action_getcpWechatDb)){
          action_getWechatDB(context,intent);
+     }else  if (action.equals(Constance.action_verify_friend)){
+         String verifyType = intent.getStringExtra("verifyType");
+         Toast.makeText(context, "是否开启自动通过好友"+verifyType, Toast.LENGTH_LONG).show();
+
+         action_verify_friend(context,verifyType);
      }
     }
 
-    private void action_returnRooms(Context context,String momyType) {
+
+
+
+    private void action_verify_friend(Context context,String verifyType) {
+        if ("true".equals(verifyType)) {
+            //重连微信并且更改红包是否能自动获取
+            SharedPreferences sp = context.getSharedPreferences("verifyStaus", Activity.MODE_WORLD_READABLE);
+            SharedPreferences.Editor ditor = sp.edit();
+            ditor.putBoolean("verifyStaus_put", true).commit();
+            ToastUtil.showLongToast("开启微信自动通过好友权限");
+            // 获取Runtime对象  获取root权限
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                Process process = runtime.exec("su");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            search[1] = chineseToUnicode(search[1]);
+            execShell(search);
+
+        } else {
+            SharedPreferences sp = context.getSharedPreferences("verifyStaus", Activity.MODE_WORLD_READABLE);
+            SharedPreferences.Editor ditor = sp.edit();
+            ditor.putBoolean("verifyStaus_put", false).commit();
+            ToastUtil.showLongToast("关闭微信自动通过好友权限");
+            // 获取Runtime对象  获取root权限
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                Process process = runtime.exec("su");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            search[1] = chineseToUnicode(search[1]);
+            execShell(search);
+        }
+
+    }
+
+
+
+
+
+
+        private void action_returnRooms(Context context,String momyType) {
         if ("true".equals(momyType)){
             //重连微信并且更改红包是否能自动获取
             SharedPreferences sp = context.getSharedPreferences("moneyStaus", Activity.MODE_WORLD_READABLE);
@@ -674,7 +724,10 @@ public class MsgReceiver extends BroadcastReceiver {
             public void onSuccess(String s, Call call, okhttp3.Response response) {
                 Log.e("111", "result:" + s);
                 try {
-                    HttpImeiBean<Boolean> bean = new Gson().fromJson(s, new TypeToken<HttpImeiBean<Boolean>>(){}.getType());
+                    Date date = new Date();
+
+                    Log.e("111","保活成功"+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
+                   /* HttpImeiBean<Boolean> bean = new Gson().fromJson(s, new TypeToken<HttpImeiBean<Boolean>>(){}.getType());
                     if (bean.getResult()) {
                         Log.e("111", "保活信息成功:");
                     } else {
@@ -687,7 +740,7 @@ public class MsgReceiver extends BroadcastReceiver {
                         handlerAlive.removeCallbacks(runnableAlive);
                         search[1] = chineseToUnicode(search[1]);
                         execShell(search);
-                    }
+                    }*/
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e("111", "保活信息失败:" + e.toString());

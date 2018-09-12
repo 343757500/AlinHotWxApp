@@ -44,6 +44,7 @@ import java.util.List;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -86,6 +87,26 @@ public class MainHook implements IXposedHookLoadPackage {
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+
+     /*   XposedBridge.log("don't use YourActivity.class here111");
+
+
+        XposedHelpers.findAndHookMethod("com.mikuwxc.autoreply.activity.RunningActivity", lpparam.classLoader,
+
+                "isModuleActive",String.class, new XC_MethodHook() {
+                    @Override
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                        super.beforeHookedMethod(param);
+                        param.args[0]="插件正常";
+                    }
+
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                        super.afterHookedMethod(param);
+                    }
+                });*/
+
+
         XSharedPreferences pre = new XSharedPreferences("com.mikuwxc.autoreply", "test");
         boolean test_put = pre.getBoolean("test_put", true);
 

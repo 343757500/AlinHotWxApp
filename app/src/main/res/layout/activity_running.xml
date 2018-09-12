@@ -57,7 +57,7 @@
         android:layout_below="@+id/tv2"
         android:gravity="center"
         android:layout_centerInParent="true"
-        android:text="服务器连接状态：true"
+        android:text="服务器连接状态：false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -68,7 +68,7 @@
         android:layout_below="@+id/tv3"
         android:gravity="center"
         android:layout_centerInParent="true"
-        android:text="微信连接状态：true"
+        android:text="微信连接状态：false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
