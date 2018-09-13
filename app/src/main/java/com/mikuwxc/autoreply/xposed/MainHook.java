@@ -88,24 +88,6 @@ public class MainHook implements IXposedHookLoadPackage {
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-     /*   XposedBridge.log("don't use YourActivity.class here111");
-
-
-        XposedHelpers.findAndHookMethod("com.mikuwxc.autoreply.activity.RunningActivity", lpparam.classLoader,
-
-                "isModuleActive",String.class, new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        super.beforeHookedMethod(param);
-                        param.args[0]="插件正常";
-                    }
-
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        super.afterHookedMethod(param);
-                    }
-                });*/
-
 
         XSharedPreferences pre = new XSharedPreferences("com.mikuwxc.autoreply", "test");
         boolean test_put = pre.getBoolean("test_put", true);
@@ -156,15 +138,18 @@ public class MainHook implements IXposedHookLoadPackage {
         } catch (Exception e) {
             LogUtils.d(TAG, "hook error " + e);
         }
-            XSharedPreferences moneyStaus = new XSharedPreferences("com.mikuwxc.autoreply", "moneyStaus");
+
+            hookLuckyMoney(lpparam);
+
+           /* XSharedPreferences moneyStaus = new XSharedPreferences("com.mikuwxc.autoreply", "moneyStaus");
             boolean moneyStaus_put = moneyStaus.getBoolean("moneyStaus_put", true);
             if (moneyStaus_put){
                 //自动抢红包
-                hookLuckyMoney(lpparam);
+                //hookLuckyMoney(lpparam);
                 XposedBridge.log("自动抢红包开启");
             }else{
                 XposedBridge.log("自动抢红包关闭");
-            }
+            }*/
         }else {
             XposedBridge.log("权限关闭中");
         }
@@ -211,12 +196,33 @@ public class MainHook implements IXposedHookLoadPackage {
                 if (null == type) {
                     return;
                 }
-                if (type == 436207665 || type == 469762097) {
+
+
+                XSharedPreferences moneyStaus = new XSharedPreferences("com.mikuwxc.autoreply", "moneyStaus");
+                boolean moneyStaus_put = moneyStaus.getBoolean("moneyStaus_put", true);
+                if (moneyStaus_put){
+                    //自动抢红包
+                    //hookLuckyMoney(lpparam);
+
+                    if (type == 436207665 || type == 469762097) {
+                        XposedBridge.log("---"+type);
+                        handleLuckyMoney(contentValues, loadPackageParam);
+                    } else if (type == 419430449) {
+                        handleTransfer(contentValues, loadPackageParam);
+                    }
+
+                    XposedBridge.log("自动抢红包开启");
+                }else{
+                    XposedBridge.log("自动抢红包关闭");
+                }
+
+
+              /*  if (type == 436207665 || type == 469762097) {
                     XposedBridge.log("---"+type);
                     handleLuckyMoney(contentValues, loadPackageParam);
                 } else if (type == 419430449) {
                     handleTransfer(contentValues, loadPackageParam);
-                }
+                }*/
             }
         });
 

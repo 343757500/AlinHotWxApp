@@ -17,6 +17,8 @@ public class ImLoginBean {
 
 
 
+
+
     public boolean isLuckPackage() {
         return luckPackage;
     }
@@ -81,6 +83,27 @@ public class ImLoginBean {
         private String id;
         private String wordsNotice; //通知敏感词
         private String wordsIntercept; //拦截
+        private boolean luckyPackage;//是否自动抢红包
+        private boolean passNewFriend;  //是否自动通过好友添加
+
+
+        public boolean isLuckyPackage() {
+            return luckyPackage;
+        }
+
+        public void setLuckyPackage(boolean luckyPackage) {
+            this.luckyPackage = luckyPackage;
+        }
+
+        public boolean isPassNewFriend() {
+            return passNewFriend;
+        }
+
+        public void setPassNewFriend(boolean passNewFriend) {
+            this.passNewFriend = passNewFriend;
+        }
+
+
 
         public String getWordsNotice() {
             return wordsNotice;

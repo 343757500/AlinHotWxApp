@@ -342,6 +342,8 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         //获取app版本
         getAppVersionName();
 
+        isModuleActive("插件状态：true");
+
     }
 
     private void getNewss() {

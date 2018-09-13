@@ -82,6 +82,8 @@ import java.util.Random;
 
 import okhttp3.Call;
 
+import static com.mikuwxc.autoreply.activity.RunningActivity.tv2;
+import static com.mikuwxc.autoreply.activity.RunningActivity.tv3;
 import static com.mikuwxc.autoreply.activity.RunningActivity.wxState;
 
 
@@ -169,7 +171,7 @@ public class MsgReceiver extends BroadcastReceiver {
             SharedPreferences.Editor ditor = sp.edit();
             ditor.putBoolean("verifyStaus_put", true).commit();
             ToastUtil.showLongToast("开启微信自动通过好友权限");
-            // 获取Runtime对象  获取root权限
+          /*  // 获取Runtime对象  获取root权限
             Runtime runtime = Runtime.getRuntime();
             try {
                 Process process = runtime.exec("su");
@@ -177,14 +179,14 @@ public class MsgReceiver extends BroadcastReceiver {
                 e.printStackTrace();
             }
             search[1] = chineseToUnicode(search[1]);
-            execShell(search);
+            execShell(search);*/
 
         } else {
             SharedPreferences sp = context.getSharedPreferences("verifyStaus", Activity.MODE_WORLD_READABLE);
             SharedPreferences.Editor ditor = sp.edit();
             ditor.putBoolean("verifyStaus_put", false).commit();
             ToastUtil.showLongToast("关闭微信自动通过好友权限");
-            // 获取Runtime对象  获取root权限
+          /*  // 获取Runtime对象  获取root权限
             Runtime runtime = Runtime.getRuntime();
             try {
                 Process process = runtime.exec("su");
@@ -192,7 +194,7 @@ public class MsgReceiver extends BroadcastReceiver {
                 e.printStackTrace();
             }
             search[1] = chineseToUnicode(search[1]);
-            execShell(search);
+            execShell(search);*/
         }
 
     }
@@ -210,14 +212,14 @@ public class MsgReceiver extends BroadcastReceiver {
             ditor.putBoolean("moneyStaus_put",true).commit();
             ToastUtil.showLongToast("开启微信自动抢红包权限");
             // 获取Runtime对象  获取root权限
-            Runtime runtime = Runtime.getRuntime();
+           /* Runtime runtime = Runtime.getRuntime();
             try {
                 Process process = runtime.exec("su");
             } catch (IOException e) {
                 e.printStackTrace();
             }
             search[1] = chineseToUnicode(search[1]);
-            execShell(search);
+            execShell(search);*/
 
         }else{
             SharedPreferences sp = context.getSharedPreferences("moneyStaus", Activity.MODE_WORLD_READABLE);
@@ -225,14 +227,14 @@ public class MsgReceiver extends BroadcastReceiver {
             ditor.putBoolean("moneyStaus_put",false).commit();
             ToastUtil.showLongToast("关闭微信自动抢红包权限");
             // 获取Runtime对象  获取root权限
-            Runtime runtime = Runtime.getRuntime();
+          /*  Runtime runtime = Runtime.getRuntime();
             try {
                 Process process = runtime.exec("su");
             } catch (IOException e) {
                 e.printStackTrace();
             }
             search[1] = chineseToUnicode(search[1]);
-            execShell(search);
+            execShell(search);*/
         }
 
 
@@ -292,10 +294,13 @@ public class MsgReceiver extends BroadcastReceiver {
                     @Override
                     public void onResponse(String s) {//s为请求返回的字符串数据
                         ImLoginBean imLoginBean = new Gson().fromJson(s, ImLoginBean.class);
+                        Log.e("111",imLoginBean.getResult().toString());
                         if(imLoginBean!=null&&imLoginBean.getCode().equals("200")&&imLoginBean.isSuccess()==true) {
                             sig = imLoginBean.getResult().getSig();
                             id = imLoginBean.getResult().getRelationId();
                             sdkAppId = imLoginBean.getResult().getSdkAppId();
+                            boolean luckyPackage = imLoginBean.getResult().isLuckyPackage();
+                            boolean passNewFriend = imLoginBean.getResult().isPassNewFriend();
                             String wordsIntercept = imLoginBean.getResult().getWordsIntercept();
                             String wordsNotice = imLoginBean.getResult().getWordsNotice();
                             if (wordsIntercept!=null){
@@ -316,6 +321,35 @@ public class MsgReceiver extends BroadcastReceiver {
                             ditor.putBoolean("test_put",true).commit();
                             ToastUtil.showLongToast("开启所有权限");
                             handlerAlive.postDelayed(runnableAlive, 10000);//每两秒执行一次runnable.
+
+                            if (luckyPackage){
+                                //重连微信并且更改红包是否能自动获取
+                                SharedPreferences sp1 = context.getSharedPreferences("moneyStaus", Activity.MODE_WORLD_READABLE);
+                                SharedPreferences.Editor ditor1 = sp1.edit();
+                                ditor1.putBoolean("moneyStaus_put",true).commit();
+                                ToastUtil.showLongToast("开启微信自动抢红包权限");
+                            }else{
+                                //重连微信并且更改红包是否能自动获取
+                                SharedPreferences sp1 = context.getSharedPreferences("moneyStaus", Activity.MODE_WORLD_READABLE);
+                                SharedPreferences.Editor ditor1 = sp1.edit();
+                                ditor1.putBoolean("moneyStaus_put",false).commit();
+                                ToastUtil.showLongToast("开启微信自动抢红包权限");
+                            }
+
+
+                            if (passNewFriend){
+                                SharedPreferences sp2 = context.getSharedPreferences("verifyStaus", Activity.MODE_WORLD_READABLE);
+                                SharedPreferences.Editor ditor2 = sp2.edit();
+                                ditor2.putBoolean("verifyStaus_put", true).commit();
+                                ToastUtil.showLongToast("开启微信自动通过好友权限");
+                            }else{
+                                SharedPreferences sp2 = context.getSharedPreferences("verifyStaus", Activity.MODE_WORLD_READABLE);
+                                SharedPreferences.Editor ditor2 = sp2.edit();
+                                ditor2.putBoolean("verifyStaus_put", false).commit();
+                                ToastUtil.showLongToast("开启微信自动通过好友权限");
+                            }
+
+
                         }else {
                             //ToastUtil.showShortToast("登录IM此帐号不能授权");
                             SharedPreferences sp = context.getSharedPreferences("test", Activity.MODE_WORLD_READABLE);
@@ -420,6 +454,7 @@ public class MsgReceiver extends BroadcastReceiver {
                         ToastUtil.showLongToast("连接服务器成功" + AppConfig.getIdentifier());
                         if (wxState!=null) {
                             wxState.setText("微信连接状态：true");
+                            tv3.setText("服务器连接状态：true");
                         }
                         NewMessageListener(context);
                         handler.postDelayed(runnable, 20000);//每两秒执行一次runnable.
@@ -430,6 +465,7 @@ public class MsgReceiver extends BroadcastReceiver {
                     public void onError(int code, String desc) {//登录失败
                         if (wxState!=null) {
                         wxState.setText("微信连接状态：false");
+                            tv3.setText("服务器连接状态：false");
                         }
                         //错误码code和错误描述desc，可用于定位请求失败原因
                         //错误码code含义请参见错误码表
@@ -654,7 +690,7 @@ public class MsgReceiver extends BroadcastReceiver {
                 }
                 beanArrayList.add(friendBean);
             }
-            c.close();
+
             String s = JSON.toJSONString(beanArrayList);
             Log.e("111",s);
             File decrypteddatabaseFile = context.getDatabasePath(SDcardPath + decryptedName);
@@ -665,6 +701,7 @@ public class MsgReceiver extends BroadcastReceiver {
             database.rawExecSQL("DETACH DATABASE "+ decryptedName.split("\\.")[0] +";");
             SQLiteDatabase decrypteddatabase = SQLiteDatabase.openOrCreateDatabase(decrypteddatabaseFile, "", null);
             //decrypteddatabase.setVersion(database.getVersion());
+            c.close();
             decrypteddatabase.close();
             database.close();
             return s;
