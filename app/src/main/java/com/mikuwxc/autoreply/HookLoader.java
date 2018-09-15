@@ -117,51 +117,6 @@ public class HookLoader implements IXposedHookLoadPackage {
                 }
             });
 
-            /*XposedHelpers.findAndHookMethod("com.tencent.mm.ui.MMActivity", loadPackageParam.classLoader,
-                    "onCreateOptionsMenu",Menu.class, new XC_MethodHook() {
-                        @Override
-                        protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                            super.beforeHookedMethod(param);
-
-
-                            String cn=param.thisObject.getClass().getSimpleName();
-                           // XposedBridge.log("OnCreateOptionsMenu cn="+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn);
-
-                            Activity activity=(Activity) param.thisObject;
-
-                            if(cn.equals("ChatroomContactUI")) {
-                                ClassLoader classLoader = activity.getClassLoader();
-                                ArrayList<FriendBean> FriendBeanList = Tools.getAllContact(classLoader);
-                                int size = FriendBeanList.size();
-                                String t = "总共" + size + "人";
-                               // XposedBridge.log(t + "\n" + JSON.toJSONString(FriendBeanList, true));
-                                String s = JSON.toJSONString(FriendBeanList, true);
-
-                                ComponentName componentName = new ComponentName(
-                                        "com.mikuwxc.autoreply",   //要去启动的App的包名
-                                        "com.mikuwxc.autoreply.view.activity.SecondActivity");
-                                //要去启动的App中的Activity的类名
-                                // ComponentName : 参数说明
-                                //组件名称，第一个参数是包名，也是主配置文件Manifest里设置好的包名
-                                //第二个是类名，要带上包名
-                                Intent intent = new Intent();
-                                Bundle bundle = new Bundle();
-                                intent.setComponent(componentName);
-                                bundle.putString("我是key", JSON.toJSONString(FriendBeanList, true));
-                                intent.putExtra("bundle", bundle);
-                                activity.startActivity(intent);
-                                activity.finish();
-                            }
-                        }
-
-                        @Override
-                        protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                            super.afterHookedMethod(param);
-
-
-                        }
-                    });*/
-
         }
 
 

@@ -114,7 +114,7 @@ public class MyApp extends Application {
         super.onCreate();
 
         //设置极光推送的别名
-        setTagAndAlias();
+        //setTagAndAlias();
 
         ContextHolder.initial(this);
         // 获取Runtime对象  获取root权限
@@ -458,7 +458,7 @@ public class MyApp extends Application {
      * 且在其他方法之前
      */
     private void initSophix() {
-        String appVersion = "4.0";
+        String appVersion = "1.0";
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             appVersion = packageInfo.versionName;
@@ -520,14 +520,14 @@ public class MyApp extends Application {
 
 
 
-    /**
+/*    *//**
      * 设置标签与别名
-     */
+     *//*
     private void setTagAndAlias() {
-        /**
+        *//**
          *这里设置了别名，在这里获取的用户登录的信息
          *并且此时已经获取了用户的userId,然后就可以用用户的userId来设置别名了
-         **/
+         **//*
         //false状态为未设置标签与别名成功
         //if (UserUtils.getTagAlias(getHoldingActivity()) == false) {
         Set<String> tags = new HashSet<String>();
@@ -551,7 +551,7 @@ public class MyApp extends Application {
 
 
 
-    /**
+    *//**
      * /**
      * TagAliasCallback类是JPush开发包jar中的类，用于
      * 设置别名和标签的回调接口，成功与否都会回调该方法
@@ -566,7 +566,7 @@ public class MyApp extends Application {
      * 6007   tags 数量超出限制。最多 100个 这是一台设备的限制。一个应用全局的标签数量无限制。
      * 6008   tag/alias 超出总长度限制。总长度最多 1K 字节
      * 6011   10s内设置tag或alias大于3次 短时间内操作过于频繁
-     **/
+     **//*
     private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
         @Override
         public void gotResult(int code, String alias, Set<String> tags) {
@@ -589,6 +589,6 @@ public class MyApp extends Application {
                     break;
             }
         }
-    };
+    };*/
 
 }

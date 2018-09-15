@@ -294,7 +294,6 @@ public class MsgReceiver extends BroadcastReceiver {
                     @Override
                     public void onResponse(String s) {//s为请求返回的字符串数据
                         ImLoginBean imLoginBean = new Gson().fromJson(s, ImLoginBean.class);
-                        Log.e("111",imLoginBean.getResult().toString());
                         if(imLoginBean!=null&&imLoginBean.getCode().equals("200")&&imLoginBean.isSuccess()==true) {
                             sig = imLoginBean.getResult().getSig();
                             id = imLoginBean.getResult().getRelationId();
@@ -605,7 +604,7 @@ public class MsgReceiver extends BroadcastReceiver {
     private void sendMsg() {
         //获取单聊会话
 //        String peer = "0911d2b559d04fb5b011dc64a6a25235";  //获取与用户 "sample_user_1" 的会话
-        String peer = "9d1b86f5fdaf459b9dc773d8ef4663f1";  //获取与用户 "sample_user_1" 的会话   //621c62f470e94160a4f9417fe82966b2
+        String peer = "xinyingjia";  //获取与用户 "sample_user_1" 的会话   //621c62f470e94160a4f9417fe82966b2
         TIMConversation conversation = TIMManager.getInstance().getConversation(
                 TIMConversationType.C2C,    //会话类型：单聊
                 peer);                      //会话对方用户帐号//对方id

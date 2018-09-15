@@ -110,15 +110,15 @@
         <!-- Ali热更新 -->
         <meta-data
             android:name="com.taobao.android.hotfix.IDSECRET"
-            android:value="25050241-1" />
+            android:value="25071377-1" />
 
         <meta-data
             android:name="com.taobao.android.hotfix.APPSECRET"
-            android:value="a5d63a74d4492cb6285ccddd80f351fd" />
+            android:value="bf035e5a95bd18ef23c1711d18504e03" />
 
         <meta-data
             android:name="com.taobao.android.hotfix.RSASECRET"
-            android:value="MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDH3VesUCyzKG3Vc+40mdTQ11zI7kMHCV6KpI3beoLSLYaYMjHRa7/nJNfx4N/dnI0Xx7FJP5N6vohvGVUuaSLF+dDzyagohOz1YhqOK4AbYMHTd02L/nlhe4bxoSaLSlbKUpwHJ83wTFyFIBPZ71J6LAGaP8gQCiMGDcZdy+P8wZKEujnFySR6BScRkUmwCBK6lQccNhNLkrBBgEncaYnVAUvAI5VXFErtsMwHiqtTXV64seiRNPtniqlq8jJ9EYkyAdT+vATI92ezjUF1f+PDlzuduBfIeUCvDLCALqcmTy/ZTys8hPWsteVSYIZ/v2tkithtYweQbQGXtHlELVl5AgMBAAECggEBALCCq8ZTfFaxcubbntk3rnrOaHRP8ERLowJAt8PJG7YxXLgXRGYWigHCSTCmEC+w7e69frYY/s+da/LqZY86bOp5aW+Uff1i/77q6Fb81gPX3PY8W/EySdKs/I1zbA4CFkpS0NeE8NyzI9aycLW9JZMeQEAQ6kg4G5xiF/mIcw4p+vUxajGjJXNyOSNHV3V/ktqOL9Fe/mq+Y+3pDTktQxCoDw/0+dbldkw3zVcsrDRYOITpPmR7zgRIQMIT5Yempm+1RmjO9zZ9qcLyw0senLm/yNguST8fJsKV0wBrHFZ3reJZ/X0hHFLggIcBvqULnWGOIN5swSVuQGuixcvdfb0CgYEA5r1gEHXzaXPCMba9inNa1P8MQMOa30BX0/Iu/nFxzbghbNR5yQu6kgqo0YQeIO9WI+rLl7kFGfjWPtQYxSdtFhr4XAAdMyqp3TmQAveXxf72+b+I189NA4T/NSPRlQvbYvtAZaCKyyoE4PZX6OB3CURYBt6heV7PUT0VECMiNfMCgYEA3b6sLh6UIMBVxXgNZdgUU7E5WndXuOLScqI6Jxu2wVGtDA6ypj5gXV8dOEkOyL3yRQVZAyD4rLbNn3uR1VkpjRdiHkhS7bT68uEUJBmlZm6pj4ps3Xdokcce0UkmQwBuf/tenxRvflcPJDvlEKTOUuD9xXwZ+BbFWcvFhHpsMeMCgYBII+lG/DmwPJr4hBPal5pMgblI/l8LcciD4XJD5yAXm3wH1J6G9v3L7z081Du/PFUIQb6JnzUzG5OQbSuZaGw4vxHrYbW/a5VUL00RQGvZYY/CIdoc7xk7AnfwG1TJbr2WwsstevYp8uc3lo2Bp7xPz2heLXj6w2O6GIjfVLy7dQKBgDYtO8wY1IAb/di9OCjF3lGEX0rnFZuqb1hqomKjtscMuYbUoHlVjB3D+1OhJeeN4P9UCydkit1H3H02p67Elg5OxD451WkWaqmkrFMVoP+h0fOsEmUZo4baa4EeqiZ8mILUW43qZEMt6hkkORcT7QT6y4XQiFfA2H7T9nIjpwOZAoGAP02eTo1OccvjjLlRhVioP4M5UJKROqjGCUkZC9f5M/6SvQ9wi5GXwF/eNEu655SRHi3S/zHxNEioYvbvi+X2ibtVG8VYvXYx9Hw4NTG5CbvXvSv5PYzTSkHmxOwsns9iIRp7P/ZUe6JW3GvhGflC2twbVQiOBYru98nE+Kj2ZKA=" />
+            android:value="MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCMbevwG/qVAyGsHwoASTN6Haj0NFH/vxbqIql2/O5/hffxI+SwjK98uIUKX/8vPfWGqZCifQRKoIy6wUcYH3puusp2I0uw/hqy1bqNVHVSxrb/vPNcc81qw24jQmHBMQtIWMhtVeTQ53dzbDgzZ58PwGa6ORggIE21Z7vzTkgHcVW6dNBQHbjwrVGzZZFp8xbzRKj9Qi8+6rKyod7dLj7XcugZr0Z/DykPhLOXJSOcbOeyDB1+dfYrIbygOlLeoSKy/AuwGWN1Pwy44TkE5eqwhaoMNj9uhqipyUyfdeytN3ygPC3d1e8BlGruMawXnRVwOdrHc31X40l3sAvGGKRNAgMBAAECggEAEPfrTX0j/0N8mx65B6XQuY3B75gu3FdLvojnr0AK1Y/rkNDEfmzRe6GUOde1rxCujVIJ7whqL1ZNCvf1zj1nft/FPRcwuzdJJJjczN0KvDDUxfwf7+jyRldNBKetxjlV4q0Pst5xIqkFbwYBmHyJ5M5b216wwpkEqsnZFSI9Y+CpIM22fIO785OxAxyQviaFZKHRFWc+iS8bh/8xorEngTrlgY+zN35mnn9ESiuX4IxMh/AxCFd6DIrpB1ZUxw4iCMI7xZuVU7j1vU9kU0Y7z8lxHxqNatR6F1hI7RterNdEobXgJrnJFD1nhJQvwj5y2kYijQgwst/7LVe5qIsVoQKBgQDEUx8Om4Myx36ivilx2W8bCPpuznDOUyKb3b726ev385V9JPg7EwuGnudHPkFLv2OvEOA7PPA9xfQ9MfCbTUJcXosxhFABc/dEWH91yWiMWIMhJaWvSMpB0wOCzySbYBqIC9Tr74uJaQblnE1B/ebrebjuQVgCeDyTCdYAEnMu+QKBgQC3HVfIrkrrTY/nqprQkNSO95oeBMgijDvMP8TzVUg4AdHBlAy4G7F0cQGtV+RDDmTmH2LfnsUqitciD8BSgAuwzajbulawCIMvdaYljO+9YqtyrJR9e3BnGnQveHFDlm7sFAwp5GaHJp2gq1n6XQKlsEG6zI6S7E0yVEizuv4w9QKBgDW5QVBwAfENYnwKabD7/Ul6pX1ZBMmROnFItw8+aBJMF+ZNDZis14SZS1TVlmyyDQdFKPdM77kXyIROfDcjZzt7q797I6GiKFINnaOP4Ao31nploPdcheyJX/aV1MCoBdqg0j1WKesKUJbYtNOQNXbOsmqQexMB8CGUmXkfk2GRAoGAFOZMdqMt+d1IZ3CZauSc3hR0iqiRDyBiUtWUbRF2xK2wex+itAC1KE0dm+NEMkMaUQmUB2HfrxNZqpGRqdjjfLJ8a1fBPSY7ktcit3Z2hm8UkmoQKKJGGf5y9FgS1Vv+HQPMv5tJ+HL32raz9ldXTgHn/qIKQ8qkpPHpulnFWWECgYEAuESaRx+L+l0E9A2bt84rllQ62/zZ6mt4YWYfKtOeoZfLfPiZAkcq4RjSJwgjruzFPIDBBk4pZJmRGa68BS3sA94S71BRggdXmTnL6ddCzm4M7uzLKeO399pRGsbp9xDnFK9HZZbHOU+BdBqvRG/rJu6Lqbt7hLQ9QgwvOdSFJjo=" />
 
 
 
@@ -479,6 +479,10 @@
              <category android:name="android.intent.category.MONKEY"/>
         </intent-filter>
         </activity>
+
+        <activity android:name=".activity.AuthorityActivity"
+            android:launchMode="singleInstance"
+            android:exported="true"/>
 
         <activity
             android:name=".activity.LoginActivity"

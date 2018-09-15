@@ -14,25 +14,23 @@ import android.widget.Toast;
 import com.mikuwxc.autoreply.common.util.AppConfig;
 import com.mikuwxc.autoreply.common.util.LogUtils;
 import com.mikuwxc.autoreply.common.util.MyFileUtil;
-import com.mikuwxc.autoreply.common.util.SharedPrefsUtils;
 import com.mikuwxc.autoreply.common.util.Utils;
 import com.mikuwxc.autoreply.receiver.Constance;
 import com.mikuwxc.autoreply.receiver.MountReceiver;
 import com.mikuwxc.autoreply.wcapi.WechatEntityFactory;
 import com.mikuwxc.autoreply.wcentity.LuckyMoneyMessage;
-import com.mikuwxc.autoreply.wcentity.UserEntity;
 import com.mikuwxc.autoreply.wcentity.WechatEntity;
 import com.mikuwxc.autoreply.wchook.AddFriendHook;
 import com.mikuwxc.autoreply.wchook.DonateHook;
 import com.mikuwxc.autoreply.wchook.HideModule;
 import com.mikuwxc.autoreply.wchook.LogWechatDbPathAndPwdHook;
-import com.mikuwxc.autoreply.wchook.MessageHook;
 import com.mikuwxc.autoreply.wchook.SensitiveHook;
 import com.mikuwxc.autoreply.wchook.VersionParamNew;
+import com.mikuwxc.autoreply.wchook.WScanxHook;
 import com.mikuwxc.autoreply.wchook.WalletHook;
 import com.mikuwxc.autoreply.wcutil.PreferencesUtils;
 import com.mikuwxc.autoreply.wcutil.XmlToJson;
-import com.mikuwxc.autoreply.wx.WechatDb;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +42,6 @@ import java.util.List;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -55,13 +52,13 @@ import static com.mikuwxc.autoreply.wchook.VersionParamNew.getNetworkByModelMeth
 import static com.mikuwxc.autoreply.wchook.VersionParamNew.getTransferRequest;
 import static com.mikuwxc.autoreply.wchook.VersionParamNew.networkRequest;
 import static com.mikuwxc.autoreply.wchook.VersionParamNew.receiveLuckyMoneyRequest;
-import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.findFirstFieldByExactType;
 import static de.robv.android.xposed.XposedHelpers.newInstance;
+
 
 /**
  * Created by Dusan (duqian) on 2017/5/6 - 16:29.
@@ -75,6 +72,7 @@ public class MainHook implements IXposedHookLoadPackage {
     private Context mContext;
     private HookMessage hookMessage;
     private CommonHook commonHook;
+    private static Context applicationContext;
 
 
 
@@ -87,6 +85,8 @@ public class MainHook implements IXposedHookLoadPackage {
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+        String packageName = lpparam.packageName;
+        initApplicationContext();
 
 
         XSharedPreferences pre = new XSharedPreferences("com.mikuwxc.autoreply", "test");
@@ -116,17 +116,15 @@ public class MainHook implements IXposedHookLoadPackage {
         LogWechatDbPathAndPwdHook.hook(create,lpparam,classLoader1,mContext);
             //监听钱包
         WalletHook.hook(create, lpparam,classLoader1,mContext);
-
-        //敏感词操作
+            //敏感词操作
             SensitiveHook.hook(create, lpparam,mContext);
-
+            //扫一扫权限
+           // WScanxHook.hook(lpparam);
             //加好友时需要hook到
             AddFriendHook.hook(create, lpparam);
-
         //操作微信相关
         Class receiver=classLoader.loadClass(Constance.receiver_wechat);
         XposedBridge.hookAllMethods(receiver,"onReceive",new MountReceiver());
-
 
         //聊天信息监听
         CommonHook.markAllActivity();
@@ -216,13 +214,6 @@ public class MainHook implements IXposedHookLoadPackage {
                     XposedBridge.log("自动抢红包关闭");
                 }
 
-
-              /*  if (type == 436207665 || type == 469762097) {
-                    XposedBridge.log("---"+type);
-                    handleLuckyMoney(contentValues, loadPackageParam);
-                } else if (type == 419430449) {
-                    handleTransfer(contentValues, loadPackageParam);
-                }*/
             }
         });
 
@@ -399,4 +390,9 @@ public class MainHook implements IXposedHookLoadPackage {
         return min + (int) (Math.random() * (max - min + 1));
     }
 
+    private synchronized void initApplicationContext() {
+        if (applicationContext == null) {
+            applicationContext = (Context) XposedHelpers.callMethod(XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ActivityThread", null), "currentActivityThread", new Object[0]), "getSystemContext", new Object[0]);
+        }
+    }
 }

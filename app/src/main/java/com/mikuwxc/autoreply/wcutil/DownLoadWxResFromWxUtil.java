@@ -65,17 +65,17 @@ public class DownLoadWxResFromWxUtil {
 
         if (isChatroom && XposedHelpers.getIntField(callMethod, wechatEntity.download_file_field3) == 0) {
             objectField = XposedHelpers.getObjectField(callMethod, wechatEntity.download_file_field2);
-            XposedBridge.log("...................."+objectField.toString());
+           // XposedBridge.log("...................."+objectField.toString());
             if (isChatroom && objectField != null) {
                 objectField = XposedHelpers.callStaticMethod(XposedHelpers.findClass(wechatEntity.download_file_class2, classLoader), wechatEntity.download_file_method3, new Object[]{objectField});
-                XposedBridge.log("[[[[[[[[[[[["+objectField.toString());
+             //   XposedBridge.log("[[[[[[[[[[[["+objectField.toString());
             }
         }
         String obj = XposedHelpers.getObjectField(XposedHelpers.callStaticMethod(XposedHelpers.findClass(wechatEntity.download_file_class3, classLoader), wechatEntity.download_file_method4, new Object[]{objectField}), wechatEntity.download_file_field5).toString();
-        XposedBridge.log("]]]]]]]]]"+obj.toString());
+      //  XposedBridge.log("]]]]]]]]]"+obj.toString());
         XposedHelpers.callStaticMethod(XposedHelpers.findClass(wechatEntity.download_file_class4, classLoader), wechatEntity.download_file_method5, new Object[]{Long.valueOf(j), objectField, null}).toString();
         objectField = XposedHelpers.newInstance(XposedHelpers.findClass(wechatEntity.download_file_class5, classLoader), new Object[]{obj});
-        XposedBridge.log("/////////"+objectField.toString());
+      //  XposedBridge.log("/////////"+objectField.toString());
         XposedHelpers.callMethod(XposedHelpers.callStaticMethod(XposedHelpers.findClass(wechatEntity.download_file_class6, classLoader), wechatEntity.download_file_method6, new Object[0]), wechatEntity.download_file_method7, new Object[]{objectField, Integer.valueOf(0)});
         XposedHelpers.callStaticMethod(XposedHelpers.findClass(wechatEntity.download_file_class7, classLoader), wechatEntity.download_file_method8, new Object[]{callMethod});
         return fileEntity;
