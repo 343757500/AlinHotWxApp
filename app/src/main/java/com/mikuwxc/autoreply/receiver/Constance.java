@@ -15,7 +15,9 @@ public class Constance {
     public static String text="text";
 
     public static String action_verify_friend="action_verify_friend";  //是否自动通过好友
-
+    public static String action_hookmessagefail="action_hookmessagefail";  //信息保存失败的时候
+    public static String action_canseewxno="action_canseewxno";  //是否能看见微信号
+    public static String action_saoyisao="action_saoyisao";  //是否开启扫一扫
 
     public static String action_getWechatDb="action_getWechatDb";
     public static String action_getcpWechatDb="action_getcpWechatDb";

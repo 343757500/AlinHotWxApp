@@ -200,14 +200,26 @@ public class MountReceiver extends XC_MethodHook {
                     in.putExtra("verifyType",content);
                     context.sendBroadcast(in);
 
-                } else if (type.equals("119")){
+                } else if (type.equals("119")){  //是否自动抢红包
                     Intent in=new Intent();
                     in.setClassName(Constance.packageName_me,Constance.receiver_my);
                     in.setAction(Constance.action_returnRoom);
                     in.putExtra("momyType",content);
                     context.sendBroadcast(in);
 
-                }else if (type.equals("201")){   //201代表加好友
+                }else if ("116".equals(type)){  //是否能看微信号
+                    Intent in=new Intent();
+                    in.setClassName(Constance.packageName_me,Constance.receiver_my);
+                    in.setAction(Constance.action_canseewxno);
+                    in.putExtra("canSeewxType",content);
+                    context.sendBroadcast(in);
+                }else if ("117".equals(type)){   //是否能打开扫一扫
+                    Intent in=new Intent();
+                    in.setClassName(Constance.packageName_me,Constance.receiver_my);
+                    in.setAction(Constance.action_saoyisao);
+                    in.putExtra("saoyisaoType",content);
+                    context.sendBroadcast(in);
+                } else if (type.equals("201")){   //201代表加好友
                     if ("1".equals(addType)){   //1代表微信号加好友
                         XposedBridge.log("addWxid"+addWxid+"addMsg"+addMsg);
                         FriendUtil.searchFriend(classLoader,create,0,"",addWxid,"",15);

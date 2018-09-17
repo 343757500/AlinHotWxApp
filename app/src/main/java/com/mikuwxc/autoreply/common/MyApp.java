@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.Settings;
@@ -30,6 +31,8 @@ import com.mikuwxc.autoreply.common.util.SharedPrefsUtils;
 import com.mikuwxc.autoreply.common.util.ToastUtil;
 import com.mikuwxc.autoreply.common.util.Utils;
 import com.lzy.okgo.OkGo;
+import com.mikuwxc.autoreply.greendao.gen.DaoMaster;
+import com.mikuwxc.autoreply.greendao.gen.DaoSession;
 import com.mikuwxc.autoreply.modle.HttpImeiBean;
 import com.mikuwxc.autoreply.service.ContextHolder;
 import com.mikuwxc.autoreply.utils.LogToFile;
@@ -108,6 +111,12 @@ public class MyApp extends Application {
     public static Build bd;
 
 
+    //greendao
+    private SQLiteDatabase db;
+    private DaoMaster mDaoMaster;
+    private DaoSession mDaoSession;
+    private DaoMaster.DevOpenHelper mHelper;
+
 
     @Override
     public void onCreate() {
@@ -170,8 +179,26 @@ public class MyApp extends Application {
         //Bugly.init(this, "9bcbc1d675", true);
 
 
-        hotUpdate();
+        hotUpdate();//热更新
+
+        setDatabase(); //greendao
     }
+
+    private void setDatabase() {
+        mHelper = new DaoMaster.DevOpenHelper(this, "notes-db", null);
+        db = mHelper.getWritableDatabase();
+        mDaoMaster = new DaoMaster(db);
+        mDaoSession = mDaoMaster.newSession();
+    }
+
+    public DaoSession getDaoSession() {
+        return mDaoSession;
+    }
+
+    public SQLiteDatabase getDb() {
+        return db;
+    }
+
 
 
     //初始化Bugly

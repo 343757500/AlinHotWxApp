@@ -179,6 +179,11 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_running);
 
+
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+        wl.acquire();
+
         //设置极光推送的别名
         setTagAndAlias();
 
@@ -1940,10 +1945,10 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
 
         *//**
          * 以下都是WindowManager.LayoutParams的相关属性 具体用途请参考SDK文档
-         *//*
+         *//**//*
         wmParams.type = WindowManager.LayoutParams.TYPE_PHONE; // 这里是关键，你也可以试试2003
         wmParams.format = PixelFormat.RGBA_8888; // 设置图片格式，效果为背景透明
-        *//**
+        *//**//**
          * 这里的flags也很关键 代码实际是wmParams.flags |=FLAG_NOT_FOCUSABLE;
          * 40的由来是wmParams的默认属性（32）+ FLAG_NOT_FOCUSABLE（8）
          *//*
@@ -1954,4 +1959,14 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         wmParams.height = 1;
         wm.addView(button, wmParams); // 创建View
     }*/
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
+        wl.release();
+    }
 }
+
+

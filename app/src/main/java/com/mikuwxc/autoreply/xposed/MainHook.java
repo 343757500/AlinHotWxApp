@@ -22,6 +22,7 @@ import com.mikuwxc.autoreply.wcentity.LuckyMoneyMessage;
 import com.mikuwxc.autoreply.wcentity.WechatEntity;
 import com.mikuwxc.autoreply.wchook.AddFriendHook;
 import com.mikuwxc.autoreply.wchook.DonateHook;
+import com.mikuwxc.autoreply.wchook.HiddenWechatIdAndPhoneNumberHook;
 import com.mikuwxc.autoreply.wchook.HideModule;
 import com.mikuwxc.autoreply.wchook.LogWechatDbPathAndPwdHook;
 import com.mikuwxc.autoreply.wchook.SensitiveHook;
@@ -119,7 +120,10 @@ public class MainHook implements IXposedHookLoadPackage {
             //敏感词操作
             SensitiveHook.hook(create, lpparam,mContext);
             //扫一扫权限
-           // WScanxHook.hook(lpparam);
+            WScanxHook.hook(lpparam);
+            //是否显示微信号
+            HiddenWechatIdAndPhoneNumberHook.hookSystem(lpparam);
+
             //加好友时需要hook到
             AddFriendHook.hook(create, lpparam);
         //操作微信相关

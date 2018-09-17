@@ -9,6 +9,7 @@ import android.view.Menu;
 
 
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -29,7 +30,15 @@ public class WScanxHook {
                         String cn=param.thisObject.getClass().getSimpleName();
                         XposedBridge.log("OnCreateOptionsMenu cn="+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn+cn);
                         Activity activity=(Activity) param.thisObject;
-                        if ("BaseScanUI".equals(cn)){
+
+
+                        XSharedPreferences saoyisaoStaus = new XSharedPreferences("com.mikuwxc.autoreply", "saoyisaoStaus");
+                        boolean saoyisaoStaus_put = saoyisaoStaus.getBoolean("saoyisaoStaus_put", true);
+
+
+
+
+                        if ("BaseScanUI".equals(cn)&&saoyisaoStaus_put==false){
                             ComponentName componentName = new ComponentName(
                                     "com.mikuwxc.autoreply",   //要去启动的App的包名
                                     "com.mikuwxc.autoreply.activity.AuthorityActivity");

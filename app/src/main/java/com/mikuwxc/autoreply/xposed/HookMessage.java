@@ -27,6 +27,8 @@ import com.mikuwxc.autoreply.common.util.Utils;
 import com.mikuwxc.autoreply.modle.FriendBean;
 import com.mikuwxc.autoreply.modle.HookMessageBean;
 import com.mikuwxc.autoreply.modle.HttpBean;
+import com.mikuwxc.autoreply.receiver.Constance;
+import com.mikuwxc.autoreply.utils.DBManager;
 import com.mikuwxc.autoreply.wcapi.WechatEntityFactory;
 import com.mikuwxc.autoreply.wcentity.AutoVerifyAllEntity;
 import com.mikuwxc.autoreply.wcentity.FileEntity;
@@ -92,6 +94,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
     private static Handler handler;
     private static Object requestCaller;
     private static List<HookMessageBean> list_msg = new ArrayList<>();
+    public static List<HookMessageBean> list_msgFail = new ArrayList<>();
     private boolean logined = false;
     private TIMConversation conversation;
     private String token;
@@ -162,6 +165,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
     private String status;
     private String filestatus;
     private String picstatus;
+    private String voisestatus;
     private int  videoState;  //视频的发送或者接受状态
     private String newImaginPath;
     private String newFilePath;
@@ -300,7 +304,8 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                             }
 
 
-                            if (newVoisePath!=null&&field_msgType.equals("34")&&newVoiseNull==null&&"1".equals(status)&&(field_conversationTime + "").length() != 19 && field_status != 1){
+                            XposedBridge.log("-----"+"newVoisePath:"+newVoisePath+"field_msgType:"+field_msgType+"newVoiseNull:"+newVoiseNull+"voisestatus:"+voisestatus+"(field_conversationTime + \"\").length()::"+(field_conversationTime + "").length()+"field_status:"+field_status);
+                            if (newVoisePath!=null&&field_msgType.equals("34")&&newVoiseNull==null&&"1".equals(voisestatus)&&(field_conversationTime + "").length() != 19 ){
                                 XposedBridge.log("上传自己发送的语音文件");
 
                                 String newVoisePathUrl = uploadAmr(newVoisePath,field_username,"Send",field_unReadCount, field_status, field_username, field_msgType, field_conversationTime);
@@ -308,7 +313,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                                 //handleMessage(field_unReadCount, field_status, field_username, newVoisePathUrl, field_msgType, field_conversationTime);
                                 XposedBridge.log("$$$$$$$$$同步自己发送的语音文件成功");
                                 newVoiseNull=newVoisePath;
-                            }else if(newVoisePath!=null&&field_msgType.equals("34")&&newVoiseNull==null&&"3".equals(status)&&(field_conversationTime + "").length() != 19 && field_status != 1){
+                            }else if(newVoisePath!=null&&field_msgType.equals("34")&&newVoiseNull==null&&"3".equals(voisestatus)&&(field_conversationTime + "").length() != 19 ){
                                 XposedBridge.log("上传接收到的语音文件");
                                String newVoisePathUrl= uploadAmr(newVoisePath,field_username,"Receive",field_unReadCount, field_status, field_username, field_msgType, field_conversationTime);
                                XposedBridge.log("$$$$$$$$$"+newVoisePathUrl);
@@ -775,15 +780,22 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                     }else if("34".equals(type)) {
 
                         XposedBridge.log("AAAAAAAAAAAAAAAAAAAAA" + type);
-                        XposedBridge.log("QQQQQQQQQQQQQQQQQQQQQ" + DownLoadWxResFromWxUtil.downloadWxVideoRes(classLoader, paramWechatEntity, paramAnonymousMethodHookParam1));
+                        XposedBridge.log("QQQQQQQQQQQQQQQQQQQQQ" + DownLoadWxResFromWxUtil.downloadWxVoiceRes(classLoader, paramWechatEntity, paramAnonymousMethodHookParam1));
 
                         String voisePath = DownLoadWxResFromWxUtil.downloadWxVoiceRes(classLoader, paramWechatEntity, paramAnonymousMethodHookParam1);
 
                         File file = new File(voisePath);
                         boolean b = file.exists();
+                        XposedBridge.log("voisePath:::"+b);
                         if (b) {
                             newVoisePath = voisePath;
                             newVoiseNull = null;
+
+                            if ("1".equals(isSend)){
+                                voisestatus="1";
+                            }else{
+                                voisestatus="3";
+                            }
                         }
                     }else if ("3".equals(type)){
                         try{
@@ -806,9 +818,9 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                                 newImaginNull=null;
 
                                 if ("1".equals(isSend)){
-                                    status="1";
+                                    picstatus="1";
                                 }else{
-                                    status="3";
+                                    picstatus="3";
                                 }
                                 //status = localContentValues.getAsString("status");
                                 XposedBridge.log("sssssssssssssss"+status);
@@ -1183,7 +1195,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
      * @param conversationTime
      * @param index
      */
-    private void saveMessage(int status, String msgType, String username, String content, final long conversationTime, final int index) {
+    private void saveMessage(final int status, final String msgType, final String username, final String content, final long conversationTime, final int index) {
         if (token == null) return;
         if ((content.contains("现在可以开始聊天了") || content.contains("accepted your friend request")) && msgType.equals("10000") && status == 4) {
             //刚刚把你添加到通讯录，现在可以开始聊天了
@@ -1231,7 +1243,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                         XposedBridge.log("保存信息成功:" + conversationTime);
                         if (errorStartIndex != -1) {//有失败的信息,但现在终于成功了
                             errorEndIndex = index;
-                            //handleFailedMessage(errorStartIndex, errorEndIndex);
+                           // handleFailedMessage(errorStartIndex, errorEndIndex);
                         }
                     } else {
                         LogUtils.w(TAG, "保存第" + index + "条信息失败:" + conversationTime);
@@ -1239,14 +1251,36 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                         if (errorStartIndex == -1) {//记录了哪一条开始失败的
                             errorStartIndex = index;
                         }
-                        //setAlarmToSyncMessage();
+
+
+                        //保存失败时候发起广播
+                        Intent in=new Intent();
+                        in.setClassName(Constance.packageName_me,Constance.receiver_my);
+                        in.setAction(Constance.action_hookmessagefail);
+                        in.putExtra("status",status+"");
+                        in.putExtra("username",username);
+                        in.putExtra("content",content);
+                        in.putExtra("msgType",msgType);
+                        in.putExtra("conversationTime",conversationTime+"");
+
+
+                        XposedBridge.log("保存第" + index + "条信息失败:" );
                     }
                 } catch (Exception e) {
                     if (errorStartIndex == -1) {
                         errorStartIndex = index;
                     }
-//                    ToastUtil.showLongToast("保存第"+index+"条信息失败:" + e.getMessage());
-                    //setAlarmToSyncMessage();
+                    //保存失败时候发起广播
+                    Intent in=new Intent();
+                    in.setClassName(Constance.packageName_me,Constance.receiver_my);
+                    in.setAction(Constance.action_hookmessagefail);
+                    in.putExtra("status",status+"");
+                    in.putExtra("username",username);
+                    in.putExtra("content",content);
+                    in.putExtra("msgType",msgType);
+                    in.putExtra("conversationTime",conversationTime+"");
+
+                    XposedBridge.log("保存第" + index + "条信息失败:" + e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -1257,7 +1291,23 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                 if (errorStartIndex == -1) {
                     errorStartIndex = index;
                 }
+                XposedBridge.log("保存第" + index + "条信息失败:" + e.getMessage());
                 LogUtils.e(TAG, "保存第" + index + "条信息失败:" + e.getMessage());
+              //  list_msgFail.add(new HookMessageBean(status, username, content, msgType, conversationTime));
+
+
+                //保存失败时候发起广播
+                Intent in=new Intent();
+                in.setClassName(Constance.packageName_me,Constance.receiver_my);
+                in.setAction(Constance.action_hookmessagefail);
+                in.putExtra("status",status+"");
+                in.putExtra("username",username);
+                in.putExtra("content",content);
+                in.putExtra("msgType",msgType);
+                in.putExtra("conversationTime",conversationTime+"");
+
+                context.sendBroadcast(in);
+
 //                ToastUtil.showLongToast("保存第"+index+"条信息失败:" + e.getMessage());
                 //setAlarmToSyncMessage();
             }

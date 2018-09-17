@@ -40,12 +40,15 @@ import com.mikuwxc.autoreply.common.util.ToastUtil;
 import com.mikuwxc.autoreply.modle.C;
 import com.mikuwxc.autoreply.modle.Event;
 import com.mikuwxc.autoreply.modle.FriendBean;
+import com.mikuwxc.autoreply.modle.HookMessageBean;
+import com.mikuwxc.autoreply.modle.HttpBean;
 import com.mikuwxc.autoreply.modle.HttpImeiBean;
 import com.mikuwxc.autoreply.modle.ImMessageBean;
 import com.mikuwxc.autoreply.presenter.tasks.AsyncFriendTask;
 import com.mikuwxc.autoreply.receiver.Constance;
 import com.mikuwxc.autoreply.wcentity.AddFriendEntity;
 import com.mikuwxc.autoreply.wcentity.CircleFriendEntity;
+import com.mikuwxc.autoreply.xposed.HookMessage;
 import com.tencent.imsdk.TIMCallBack;
 import com.tencent.imsdk.TIMConversation;
 import com.tencent.imsdk.TIMConversationType;
@@ -80,7 +83,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import de.robv.android.xposed.XposedBridge;
 import okhttp3.Call;
+import okhttp3.Response;
 
 import static com.mikuwxc.autoreply.activity.RunningActivity.tv2;
 import static com.mikuwxc.autoreply.activity.RunningActivity.tv3;
@@ -98,7 +103,10 @@ public class MsgReceiver extends BroadcastReceiver {
     private String sdkAppId;
     private final String SDcardPath = "/storage/emulated/0/JCM/";
     ArrayList<FriendBean> beanArrayList=new ArrayList<>();
+    public static List<HookMessageBean> list_msgFail = new ArrayList<>();
     FriendBean friendBean;
+    private String token;
+
     Handler handler=new Handler();
     Runnable runnable=new Runnable() {
         @Override
@@ -158,11 +166,61 @@ public class MsgReceiver extends BroadcastReceiver {
          Toast.makeText(context, "是否开启自动通过好友"+verifyType, Toast.LENGTH_LONG).show();
 
          action_verify_friend(context,verifyType);
+     }else if (action.equals(Constance.action_hookmessagefail)){
+         String status = intent.getStringExtra("status");
+         String username = intent.getStringExtra("username");
+         String content = intent.getStringExtra("content");
+         String msgType = intent.getStringExtra("msgType");
+         String conversationTime = intent.getStringExtra("conversationTime");
+         list_msgFail.add(new HookMessageBean(Integer.parseInt(status), username, content, msgType, Long.parseLong(conversationTime)));
+     }else if (action.equals(Constance.action_canseewxno)){
+         String canSeewxType = intent.getStringExtra("canSeewxType");
+         Toast.makeText(context, "是否可以看微信号"+canSeewxType, Toast.LENGTH_LONG).show();
+
+         action_canseewxno(context,canSeewxType);
+
+     }else if (action.equals(Constance.action_saoyisao)){
+         String saoyisaoType = intent.getStringExtra("saoyisaoType");
+         Toast.makeText(context, "是否可以看微信号"+saoyisaoType, Toast.LENGTH_LONG).show();
+
+         action_saoyisao(context,saoyisaoType);
      }
     }
 
 
 
+    private void action_saoyisao(Context context,String saoyisaoType) {
+        if ("true".equals(saoyisaoType)) {
+            //重连微信并且更改红包是否能自动获取
+            SharedPreferences sp = context.getSharedPreferences("saoyisaoStaus", Activity.MODE_WORLD_READABLE);
+            SharedPreferences.Editor ditor = sp.edit();
+            ditor.putBoolean("saoyisaoStaus_put", true).commit();
+            ToastUtil.showLongToast("开启微信扫一扫能权限");
+
+        } else {
+            SharedPreferences sp = context.getSharedPreferences("saoyisaoStaus", Activity.MODE_WORLD_READABLE);
+            SharedPreferences.Editor ditor = sp.edit();
+            ditor.putBoolean("saoyisaoStaus_put", false).commit();
+            ToastUtil.showLongToast("关闭微信扫一扫权限");
+        }
+    }
+
+
+    private void action_canseewxno(Context context,String canSeewxType) {
+        if ("true".equals(canSeewxType)) {
+            //重连微信并且更改红包是否能自动获取
+            SharedPreferences sp = context.getSharedPreferences("canSeewxStaus", Activity.MODE_WORLD_READABLE);
+            SharedPreferences.Editor ditor = sp.edit();
+            ditor.putBoolean("canSeewxStaus_put", true).commit();
+            ToastUtil.showLongToast("开启微信能否看微信号权限");
+
+        } else {
+            SharedPreferences sp = context.getSharedPreferences("canSeewxStaus", Activity.MODE_WORLD_READABLE);
+            SharedPreferences.Editor ditor = sp.edit();
+            ditor.putBoolean("canSeewxStaus_put", false).commit();
+            ToastUtil.showLongToast("关闭微信能否看微信号权限");
+        }
+    }
 
     private void action_verify_friend(Context context,String verifyType) {
         if ("true".equals(verifyType)) {
@@ -762,7 +820,15 @@ public class MsgReceiver extends BroadcastReceiver {
                 try {
                     Date date = new Date();
 
-                    Log.e("111","保活成功"+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
+                    Log.e("111","保活成功"+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)+list_msgFail.size());
+
+
+                    if (list_msgFail.size()>0){
+                        handleFailedMessage(list_msgFail);
+                    }else {
+                        Log.e("111","保活成功::没有缓存失败的信息");
+                    }
+
                    /* HttpImeiBean<Boolean> bean = new Gson().fromJson(s, new TypeToken<HttpImeiBean<Boolean>>(){}.getType());
                     if (bean.getResult()) {
                         Log.e("111", "保活信息成功:");
@@ -787,6 +853,55 @@ public class MsgReceiver extends BroadcastReceiver {
                 super.onError(call, response, e);
                 Log.e("111", "保活信息失败:");
 
+            }
+        });
+    }
+
+
+
+    /**
+     * 定时发送实时同步失败的信息
+     *
+     */
+    private void handleFailedMessage(List<HookMessageBean> hookMessageBeans) {
+
+        Gson gson = new Gson();
+        List<HookMessageBean> errorMsg = new ArrayList<>();
+        for (int i = 0; i < hookMessageBeans.size(); i++) {
+            HookMessageBean bean = hookMessageBeans.get(i);
+            if (token == null) {
+                token = MyFileUtil.readFromFile(AppConfig.APP_FOLDER + "/token");
+                token = token.substring(1, token.length() - 1);
+//            LogUtils.w(TAG, "token:" + token);
+            }
+            bean.setToken(token);
+            errorMsg.add(bean);
+        }
+        String msgListStr = gson.toJson(errorMsg);
+        Log.e("111","msgListStr:::"+msgListStr);
+        if (AppConfig.getSelectHost() == null) {
+            AppConfig.setHost(AppConfig.OUT_NETWORK);
+        }
+        OkGo.post(AppConfig.OUT_NETWORK + NetApi.syncMessage).headers("Content-Type", "application/json").upJson(msgListStr).execute(new StringCallback() {
+            @Override
+            public void onSuccess(String s, Call call, Response response) {
+                try {
+                    HttpBean bean = new Gson().fromJson(s, HttpBean.class);
+                    if (bean.isSuccess()) {
+                       list_msgFail.clear();
+                    } else {
+                        Log.e("111","同步缓存数据失败"+bean.isSuccess());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("111","同步缓存数据失败"+e.toString());
+                }
+            }
+
+            @Override
+            public void onError(Call call, Response response, Exception e) {
+                super.onError(call, response, e);
+                Log.e("111","同步缓存数据失败"+e.toString());
             }
         });
     }

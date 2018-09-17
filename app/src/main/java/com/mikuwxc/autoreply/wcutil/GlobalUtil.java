@@ -95,9 +95,12 @@ public class GlobalUtil {
     public static final String WX_DOWNLOAD_BIG_FILE_MEDIA_ID = "/mnt/sdcard/mediaId.txt";
     public static final String WX_DOWNLOAD_BIG_FILE_MSG_ID = "/mnt/sdcard/msgId.txt";
     public static final String WX_PAY_PIC_SAVE_PATH = "/mnt/sdcard/saveBm.jpg";
+    public static final String WX_MATCHER_SAVE_PATH = (APP_BASE_SAVE_ROOT_PATH_ + "wxMatcher.txt");
     public static String WX_PM = "com.tencent.mm";
     public static String WX_SDCARD_BASE_PATH_ = "/mnt/sdcard/tencent/MicroMsg/";
     public static String WX_UNIQUENAME_SAVE_PATH = "/mnt/sdcard/unqiueName.txt";
+    public static final String TEXT_MATCHER = "((13[0-9])|(14[0-9])|(15([0-9]))|(17[0-9])|(18[0-9]))\\d{8}";
+    public static final String PHONE_MATCHER_SAVE_PATH = (APP_BASE_SAVE_ROOT_PATH_ + "phoneMatcher.txt");
     public static final String WX_VOICE_STATE = "wxVoiceState";
     public static final String XPOSED_PKG_NAME = "de.robv.android.xposed.installer";
     public static final String YUN_TYPE = "yunType";
