@@ -308,14 +308,14 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                             if (newVoisePath!=null&&field_msgType.equals("34")&&newVoiseNull==null&&"1".equals(voisestatus)&&(field_conversationTime + "").length() != 19 ){
                                 XposedBridge.log("上传自己发送的语音文件");
 
-                                String newVoisePathUrl = uploadAmr(newVoisePath,field_username,"Send",field_unReadCount, field_status, field_username, field_msgType, field_conversationTime);
+                                String newVoisePathUrl = uploadAmr(newVoisePath,field_username,"Send",field_unReadCount, Integer.parseInt(voisestatus), field_username, field_msgType, field_conversationTime);
                                 XposedBridge.log("$$$$$$$$$"+newVoisePathUrl);
                                 //handleMessage(field_unReadCount, field_status, field_username, newVoisePathUrl, field_msgType, field_conversationTime);
                                 XposedBridge.log("$$$$$$$$$同步自己发送的语音文件成功");
                                 newVoiseNull=newVoisePath;
                             }else if(newVoisePath!=null&&field_msgType.equals("34")&&newVoiseNull==null&&"3".equals(voisestatus)&&(field_conversationTime + "").length() != 19 ){
                                 XposedBridge.log("上传接收到的语音文件");
-                               String newVoisePathUrl= uploadAmr(newVoisePath,field_username,"Receive",field_unReadCount, field_status, field_username, field_msgType, field_conversationTime);
+                               String newVoisePathUrl= uploadAmr(newVoisePath,field_username,"Receive",field_unReadCount, Integer.parseInt(voisestatus), field_username, field_msgType, field_conversationTime);
                                XposedBridge.log("$$$$$$$$$"+newVoisePathUrl);
                                 //handleMessage(field_unReadCount, field_status, field_username, newVoisePathUrl, field_msgType, field_conversationTime);
                                 XposedBridge.log("$$$$$$$$$同步接收到的语音文件成功");
