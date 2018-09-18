@@ -16,6 +16,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
+import com.mikuwxc.autoreply.bean.DeleteFriendBean;
 import com.mikuwxc.autoreply.common.BaseHook;
 import com.mikuwxc.autoreply.common.net.NetApi;
 import com.mikuwxc.autoreply.common.util.AppConfig;
@@ -164,6 +165,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
     private String newVoisePath;
     private String status;
     private String filestatus;
+    private String monystatus;
     private String picstatus;
     private String voisestatus;
     private int  videoState;  //视频的发送或者接受状态
@@ -239,7 +241,16 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
 
                             //领取红包相关信息上传
                             if (momyType!=null&&"10000".equals(momyType)&&momyTypeNull==null){
-                                handleMessage(field_unReadCount, field_status, field_username, momyContent, momyType, field_conversationTime);
+                                handleMessage(field_unReadCount, Integer.parseInt("3"), field_username, momyContent, momyType, field_conversationTime);
+                                momyTypeNull=momyType;
+                            }/*else if (momyType!=null&&"10000".equals(momyType)&&momyTypeNull==null&&"3".equals(monystatus)){
+                                XposedBridge.log("接收红包");
+                                handleMessage(field_unReadCount,  Integer.parseInt(monystatus), field_username, momyContent, momyType, field_conversationTime);
+                                momyTypeNull=momyType;
+                            }*/
+
+                            if (momyType!=null&&"436207665".equals(momyType)&&momyTypeNull==null){
+                                handleMessage(field_unReadCount, Integer.parseInt(monystatus), field_username, momyContent, momyType, field_conversationTime);
                                 momyTypeNull=momyType;
                             }
 
@@ -304,7 +315,6 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                             }
 
 
-                            XposedBridge.log("-----"+"newVoisePath:"+newVoisePath+"field_msgType:"+field_msgType+"newVoiseNull:"+newVoiseNull+"voisestatus:"+voisestatus+"(field_conversationTime + \"\").length()::"+(field_conversationTime + "").length()+"field_status:"+field_status);
                             if (newVoisePath!=null&&field_msgType.equals("34")&&newVoiseNull==null&&"1".equals(voisestatus)&&(field_conversationTime + "").length() != 19 ){
                                 XposedBridge.log("上传自己发送的语音文件");
 
@@ -323,7 +333,6 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                             }
 
 
-                            XposedBridge.log("-----"+"newImaginPath:"+newImaginPath+"field_msgType:"+field_msgType+"sendFileNull:"+newImaginNull+"picstatus:"+picstatus+"(field_conversationTime + \"\").length()::"+(field_conversationTime + "").length()+"field_status:"+field_status);
                             if (newImaginPath!=null&&field_msgType.equals("3")&&newImaginNull==null&&"1".equals(picstatus)&&(field_conversationTime + "").length() != 19 /*&& field_status != 3*/){
                                 newImaginNull=newImaginPath;
                                 File file=new File(newImaginPath);
@@ -360,7 +369,6 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
 
 
 
-                            XposedBridge.log("-----"+"sendFilePath:"+sendFilePath+"field_msgType:"+field_msgType+"sendFileNull:"+sendFileNull+"filestatus:"+filestatus+"(field_conversationTime + \"\").length()::"+(field_conversationTime + "").length()+"field_status:"+field_status);
                             if (sendFilePath!=null&&field_msgType.equals("49")&&sendFileNull==null&&"1".equals(filestatus)&&(field_conversationTime + "").length() != 19 ){
                                 sendFileNull=sendFilePath;
                                 XposedBridge.log("707120170"+sendFilePath);
@@ -410,7 +418,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                             if ((field_conversationTime + "").length() == 19 || field_status == 1) {
                                 return;
                             }
-                            if (list_msg.size() == 0&&!field_msgType.equals("34")&&!field_msgType.equals("43")&&!field_msgType.equals("3")&&!field_msgType.equals("49")&&!field_msgType.equals("10000")&&!field_msgType.equals("419430449")&&!field_msgType.equals("1")) {
+                            if (list_msg.size() == 0&&!field_msgType.equals("34")&&!field_msgType.equals("43")&&!field_msgType.equals("3")&&!field_msgType.equals("49")&&!field_msgType.equals("10000")&&!field_msgType.equals("419430449")&&!field_msgType.equals("1")&&!"436207665".equals(field_msgType)) {
                                 handleMessage(field_unReadCount, field_status, field_username, field_content, field_msgType, field_conversationTime);
                             } else {
                                 //对比之前的信息
@@ -421,7 +429,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                                         return;
                                     }
                                 }
-                                if (!isSaved&&!field_msgType.equals("34")&&!field_msgType.equals("43")&&!field_msgType.equals("3")&&!field_msgType.equals("49")&&!field_msgType.equals("10000")&&!field_msgType.equals("419430449")&&!field_msgType.equals("1")) {
+                                if (!isSaved&&!field_msgType.equals("34")&&!field_msgType.equals("43")&&!field_msgType.equals("3")&&!field_msgType.equals("49")&&!field_msgType.equals("10000")&&!field_msgType.equals("419430449")&&!field_msgType.equals("1")&&!"436207665".equals(field_msgType)) {
                                     if (list_msg.size() > 2000 && errorStartIndex == -1) {//以防信息太多导致遍历需时长,在没error的时候清零
                                         list_msg = new ArrayList<>();
                                     }
@@ -662,6 +670,8 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                 {
                     str = (String)paramAnonymousMethodHookParam.args[0];
                     localContentValues = (ContentValues)paramAnonymousMethodHookParam.args[2];
+                    XposedBridge.log("QWEREEEEEEEEEEEEEEEEE"+localContentValues.toString());
+
 
                     if (localContentValues.getAsString("encryptTalker")!=null&&localContentValues.getAsString("msgContent")!=null/*&& "1".equals(SharedPrefsUtils.getString("AntoVerity"))*/){
                         autoVerifyUser=localContentValues.toString();
@@ -671,9 +681,6 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                         JSONObject xmlToJson=new XmlToJson.Builder(msgContent).build();
 
                         AutoVerifyAllEntity autoVerifyAllEntity=new Gson().fromJson(xmlToJson.toString(), AutoVerifyAllEntity.class);
-                        XposedBridge.log("aaaa"+localContentValues.getAsString("talker"));
-                        XposedBridge.log("bbbb"+autoVerifyAllEntity.getMsg().getTicket());
-                        XposedBridge.log("cccc"+Integer.parseInt(autoVerifyAllEntity.getMsg().getScene()));
 
 
                         handleMessage(0, 0, "", autoVerifyUser, "103", 0);
@@ -700,8 +707,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
 
                     }
 
-                    XposedBridge.log("QWEREEEEEEEEEEEEEEEEE"+localContentValues.toString());
-                    XposedBridge.log("ABCDE"+ localContentValues.getAsString("isUpload")+"-----"+localContentValues.getAsString("fileFullPath"));
+
                     if ("20".equals(localContentValues.getAsString("msgSubType"))&&localContentValues.getAsString("path")!=null){
                         String sendImaginPath=localContentValues.getAsString("path");
                         String newsendImaginPath="/storage/emulated/0/tencent/MicroMsg/"+sendImaginPath;
@@ -719,6 +725,21 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                         sendFilePath=filePath;
                         sendFileNull=null;
                     }
+
+
+                   /* //上传删除好友的统计
+                    if ("0".equals(localContentValues.getAsString("lastSeq"))&&StringUtils.isNotBlank(localContentValues.getAsString("userName"))&&"0".equals(localContentValues.getAsString("reserved2"))){
+                        UserEntity userEntity = WechatDb.getInstance().selectSelf();
+                        String userName = userEntity.getUserName();
+                        String userTalker = userEntity.getUserTalker();
+                        String headPic = userEntity.getHeadPic();
+                        String alias = userEntity.getAlias();  //微信号
+                        XposedBridge.log("aliasaliasaliasalias::"+alias);
+                        handleMessageDeleteFriend(alias, localContentValues.getAsString("userName"), localContentValues.getAsString("reserved2"));
+                    }*/
+
+
+
                     i = -1;
                     switch (str.hashCode())
                     {
@@ -931,6 +952,7 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                          momyType=type;
                          momyContent=content;
                          momyTypeNull=null;
+
                     }else if ("419430449".equals(type)){//收到转账信息
                         XposedBridge.log("CCCCCCCCCCCCCCCCCCCCCCC"+"收到转账"+localContentValues);
                         String content=localContentValues.getAsString("content");
@@ -948,11 +970,21 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
 
                     }else if ("2000".equals(type)){  //领取转账信息
                         XposedBridge.log("DDDDDDDDDDDDDDDDDDDDDDDDD"+"接收转账"+localContentValues);
+                    }else if("436207665".equals(type)){
+                        String content=localContentValues.getAsString("content");
+
+
+                        momyType=type;
+                        momyContent=content;
+                        momyTypeNull=null;
+                        if ("1".equals(isSend)){
+                            monystatus="1";
+                        }else{
+                            monystatus="3";
+                        }
                     }
 
 
-                    XposedBridge.log("=====insertWithOnConflict afterHookedMethod[%s]"+ new Object[] { localContentValues.toString() });
-                    XposedBridge.log("===== HOOK NEW FRIEND REQUEST"+ new Object[0]);
                     return;
                 }
             }
@@ -978,7 +1010,6 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
                         String isSend =localContentValues.getAsString("isSend");
                         XposedBridge.log("statuss:"+statuss);
                         if ("1".equals(type)){
-                            XposedBridge.log("handleMessage::::::::::::::");
 
                             if ("1".equals(isSend)){
                                 statuss=1;
@@ -989,7 +1020,6 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
 
 
 
-                        XposedBridge.log("=====insertWithOnConflict beforeHookedMethod[%s]"+ new Object[] { localContentValues.toString() });
                         XposedBridge.log("111111111111111111111111"+ localContentValues.toString());
                         String paramAnonymousMethodHookParam1 = localContentValues.getAsString("type");
                         long l1 = localContentValues.getAsLong("createTime").longValue();
@@ -1548,6 +1578,30 @@ public class HookMessage extends BaseHook implements MultiFileObserver.MessagePa
         }catch(Exception e){
             throw new Exception(e.getMessage(), e);
         }
+    }
+
+
+    public void handleMessageDeleteFriend(String wxno,String wxid,String createtime){
+        Gson gson = new Gson();
+        DeleteFriendBean deleteFriendBean=new DeleteFriendBean();
+        deleteFriendBean.setWxno(wxno);
+        deleteFriendBean.setFriendWxid(wxid);
+        deleteFriendBean.setConversationTime(createtime);
+
+        String friendStr = gson.toJson(deleteFriendBean);
+
+        OkGo.delete(AppConfig.OUT_NETWORK+ NetApi.deletefriend+ "?" + "wxno=" +wxno+ "&friendWxid=" + wxid+"&conversationTime="+createtime).execute(new StringCallback() {
+            @Override
+            public void onSuccess(String s, Call call, Response response) {
+                XposedBridge.log("sssssss"+s);
+            }
+
+            @Override
+            public void onError(Call call, Response response, Exception e) {
+                super.onError(call, response, e);
+                XposedBridge.log("sssssss"+e.toString());
+            }
+        });
     }
 
 

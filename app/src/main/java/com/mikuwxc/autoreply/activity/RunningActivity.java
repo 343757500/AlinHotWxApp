@@ -15,11 +15,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
@@ -73,16 +71,11 @@ import com.mikuwxc.autoreply.common.util.AppConfig;
 import com.mikuwxc.autoreply.common.util.Constants;
 import com.mikuwxc.autoreply.common.util.LogUtils;
 import com.mikuwxc.autoreply.common.util.MyFileUtil;
-import com.mikuwxc.autoreply.common.util.ServiceUtil;
-import com.mikuwxc.autoreply.common.util.SharedPrefsUtils;
 import com.mikuwxc.autoreply.common.util.ToastUtil;
-import com.mikuwxc.autoreply.common.util.Utils;
 import com.mikuwxc.autoreply.db.PhoneUser;
 import com.mikuwxc.autoreply.db.PhoneUserHelper;
-import com.mikuwxc.autoreply.modle.HttpBean;
 import com.mikuwxc.autoreply.modle.HttpImeiBean;
 import com.mikuwxc.autoreply.receiver.Constance;
-import com.mikuwxc.autoreply.service.WechatService;
 import com.mikuwxc.autoreply.utils.ContactsAccessPublic;
 import com.mikuwxc.autoreply.utils.FriendCircleShare;
 import com.mikuwxc.autoreply.utils.HttpUtils;
@@ -92,7 +85,6 @@ import com.mikuwxc.autoreply.utils.PreferenceUtil;
 import com.mikuwxc.autoreply.widget.MainProgressBar;
 import com.mikuwxc.autoreply.widget.UrlCircleImageView;
 import com.mikuwxc.autoreply.wxid.WxIdUtil;
-import com.tencent.mm.opensdk.modelmsg.SendAuth;
 
 
 import net.sqlcipher.Cursor;
@@ -117,16 +109,12 @@ import java.util.TimeZone;
 
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
-import de.robv.android.xposed.XposedBridge;
 import it.sauronsoftware.jave.AudioAttributes;
 import it.sauronsoftware.jave.Encoder;
 import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.EncodingAttributes;
 import it.sauronsoftware.jave.InputFormatException;
 import okhttp3.Call;
-
-import static android.os.FileObserver.CREATE;
-import static java.sql.Types.VARCHAR;
 
 
 public class RunningActivity extends Activity implements AutoReplyService.ControlFinish {
@@ -180,9 +168,10 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         setContentView(R.layout.activity_running);
 
 
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
-        wl.acquire();
+       /* Log.e("111","Start polling service...");
+        PollingUtils.startPollingService(this, 5, LoopService.class, PollingService.ACTION);*/
+
+
 
         //设置极光推送的别名
         setTagAndAlias();
@@ -1960,13 +1949,13 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         wm.addView(button, wmParams); // 创建View
     }*/
 
-    @Override
+/*    @Override
     protected void onDestroy() {
         super.onDestroy();
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
-        wl.release();
-    }
+        Log.e("111","Stop polling service...");
+        PollingUtils.stopPollingService(this, LoopService.class, PollingService.ACTION);
+
+    }*/
 }
 
 

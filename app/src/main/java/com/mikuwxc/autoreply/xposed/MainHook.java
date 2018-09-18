@@ -96,6 +96,10 @@ public class MainHook implements IXposedHookLoadPackage {
         if (!wechat_package.equals(lpparam.packageName)) {
             return;
         }
+
+
+
+
         //判断是否具有全部微信权限
         if (test_put){
         XposedBridge.log("权限开启中");
