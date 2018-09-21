@@ -29,6 +29,8 @@ public class NetApi {
     public static final String imLogin = "api/1.0/im/wxno";
 
     public static final String deletefriend = "/api/1.0/logger/wechatFriend/delete";
+    public static final String loginweb = "api/1.0/log/login";
+    public static final String retract = "api/1.0/wechatMessage/retract";  //撤回消息
 
     public static final String upDateHot = "/api/1.0/logger/version/code";
 }

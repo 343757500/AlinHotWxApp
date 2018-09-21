@@ -21,14 +21,17 @@ import com.mikuwxc.autoreply.wcapi.WechatEntityFactory;
 import com.mikuwxc.autoreply.wcentity.LuckyMoneyMessage;
 import com.mikuwxc.autoreply.wcentity.WechatEntity;
 import com.mikuwxc.autoreply.wchook.AddFriendHook;
+import com.mikuwxc.autoreply.wchook.DeleteContactsHook;
 import com.mikuwxc.autoreply.wchook.DonateHook;
 import com.mikuwxc.autoreply.wchook.HiddenWechatIdAndPhoneNumberHook;
 import com.mikuwxc.autoreply.wchook.HideModule;
 import com.mikuwxc.autoreply.wchook.LogWechatDbPathAndPwdHook;
+import com.mikuwxc.autoreply.wchook.ReportDeleteWxMessageRiskOperateHook;
 import com.mikuwxc.autoreply.wchook.SensitiveHook;
 import com.mikuwxc.autoreply.wchook.VersionParamNew;
 import com.mikuwxc.autoreply.wchook.WScanxHook;
 import com.mikuwxc.autoreply.wchook.WalletHook;
+import com.mikuwxc.autoreply.wchook.WeChatWebLoginHook;
 import com.mikuwxc.autoreply.wcutil.PreferencesUtils;
 import com.mikuwxc.autoreply.wcutil.XmlToJson;
 
@@ -127,6 +130,12 @@ public class MainHook implements IXposedHookLoadPackage {
             WScanxHook.hook(lpparam);
             //是否显示微信号
             HiddenWechatIdAndPhoneNumberHook.hookSystem(lpparam);
+            //删除好友上报服务器
+            DeleteContactsHook.hook(create, lpparam);
+            //撤回消息统计
+            ReportDeleteWxMessageRiskOperateHook.hook(create, lpparam);
+            //网页或者pc版微信登录上传服务器
+            WeChatWebLoginHook.hook(create, lpparam);
 
             //加好友时需要hook到
             AddFriendHook.hook(create, lpparam);

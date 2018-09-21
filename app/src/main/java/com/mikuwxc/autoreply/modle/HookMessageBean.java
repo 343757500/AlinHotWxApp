@@ -11,26 +11,37 @@ public class HookMessageBean {
     private String content;
     private String msgType;//1:文字; 3:图片 34:语音
     private long conversationTime;//13位数的代表成功收到的时间,19位的是开始发送的时间,只有status为1的时候会有
+    private String msgId;
 
     public HookMessageBean() {
 
     }
 
-    public HookMessageBean(int status, String username, String content, String msgType, long conversationTime) {
+    public HookMessageBean(int status, String username, String content, String msgType, long conversationTime,String msgId) {
         this.status = status;
         this.username = username;
         this.content = content;
         this.msgType = msgType;
         this.conversationTime = conversationTime;
+        this.msgId=msgId;
     }
 
-    public HookMessageBean(String token, int status, String username, String content, String msgType, long conversationTime) {
+    public HookMessageBean(String token, int status, String username, String content, String msgType, long conversationTime,String msgId) {
         this.token = token;
         this.status = status;
         this.username = username;
         this.content = content;
         this.msgType = msgType;
         this.conversationTime = conversationTime;
+        this.msgId=msgId;
+    }
+
+    public String getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
     }
 
     public String getToken() {

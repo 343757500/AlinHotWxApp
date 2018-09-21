@@ -8,7 +8,9 @@ import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.mikuwxc.autoreply.activity.AuthorityActivity;
 import com.mikuwxc.autoreply.activity.HuliaoActivity;
+import com.mikuwxc.autoreply.activity.RunningActivity;
 
 
 /**
@@ -21,7 +23,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
         this.context = context;
-        Toast.makeText(context, "闹铃响了, 可以做点事情了~~", Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "闹铃响了, 可以做点事情了~~", Toast.LENGTH_LONG).show();
         Log.d("AlarmReceiver", "闹铃响了, 可以做点事情了~~");
         KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         KeyguardManager.KeyguardLock kl = km.newKeyguardLock("unlock");
@@ -29,10 +31,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK, "bright");
         wl.acquire();
-        wl.release();
-        intent = new Intent(context, HuliaoActivity.class);
+        //wl.release();
+     /*   intent = new Intent(context, AuthorityActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        context.startActivity(intent);*/
 //        Intent mIntent = context.getPackageManager().getLaunchIntentForPackage("com.tencent.mm");
 //        context.startActivity(mIntent);
 

@@ -100,7 +100,7 @@ public class WalletHook
             XposedBridge.log("WWWWWWWWWWWWWWWW"+paramAnonymousMethodHookParam2.toString());
 
           HookMessage hookMessage=new HookMessage(classLoader1, context,paramLoadPackageParam);
-          hookMessage.handleMessage(0, 3, str, "你领取的金额是:[" + BigDecimal.valueOf(i).divide(new BigDecimal(100)).toString() + "]元", "55535", System.currentTimeMillis());
+          hookMessage.handleMessage(0, 3, str, "你领取的金额是:[" + BigDecimal.valueOf(i).divide(new BigDecimal(100)).toString() + "]元", "55535", System.currentTimeMillis(),"");
           XposedBridge.log("同步金额成功");
 
         }

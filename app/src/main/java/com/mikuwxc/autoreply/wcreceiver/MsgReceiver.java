@@ -2,6 +2,9 @@ package com.mikuwxc.autoreply.wcreceiver;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -12,6 +15,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -26,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
+import com.mikuwxc.autoreply.activity.AuthorityActivity;
 import com.mikuwxc.autoreply.bean.ImLoginBean;
 import com.mikuwxc.autoreply.common.MyApp;
 import com.mikuwxc.autoreply.common.VersionInfo;
@@ -172,7 +177,8 @@ public class MsgReceiver extends BroadcastReceiver {
          String content = intent.getStringExtra("content");
          String msgType = intent.getStringExtra("msgType");
          String conversationTime = intent.getStringExtra("conversationTime");
-         list_msgFail.add(new HookMessageBean(Integer.parseInt(status), username, content, msgType, Long.parseLong(conversationTime)));
+         String msgId = intent.getStringExtra("msgId");
+         list_msgFail.add(new HookMessageBean(Integer.parseInt(status), username, content, msgType, Long.parseLong(conversationTime),msgId));
      }else if (action.equals(Constance.action_canseewxno)){
          String canSeewxType = intent.getStringExtra("canSeewxType");
          Toast.makeText(context, "是否可以看微信号"+canSeewxType, Toast.LENGTH_LONG).show();
@@ -821,7 +827,6 @@ public class MsgReceiver extends BroadcastReceiver {
                     Date date = new Date();
 
                     Log.e("111","保活成功"+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date)+list_msgFail.size());
-
 
                     if (list_msgFail.size()>0){
                         handleFailedMessage(list_msgFail);

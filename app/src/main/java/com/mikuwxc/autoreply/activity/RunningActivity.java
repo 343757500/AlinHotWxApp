@@ -8,6 +8,7 @@ import android.app.AlarmManager;
 import android.app.KeyguardManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -165,11 +166,31 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_running);
 
 
        /* Log.e("111","Start polling service...");
         PollingUtils.startPollingService(this, 5, LoopService.class, PollingService.ACTION);*/
+        //setAlarmTime(0, 1, 0);
+
+
+        Intent intent =new Intent(RunningActivity.this, AlarmReceiver.class);
+        intent.setAction("repeating");
+        PendingIntent sender=PendingIntent
+                .getBroadcast(RunningActivity.this, 0, intent, 0);
+        //开始时间
+        long firstime=SystemClock.elapsedRealtime();
+
+        AlarmManager am=(AlarmManager)getSystemService(ALARM_SERVICE);
+        //5秒一个周期，不停的发送广播
+        am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstime, 1, sender);
+
+        PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK, "bright");
+        wl.acquire();
+       // wl.release();
+
 
 
 
