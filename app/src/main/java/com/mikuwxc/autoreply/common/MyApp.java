@@ -35,6 +35,7 @@ import com.mikuwxc.autoreply.greendao.gen.DaoMaster;
 import com.mikuwxc.autoreply.greendao.gen.DaoSession;
 import com.mikuwxc.autoreply.modle.HttpImeiBean;
 import com.mikuwxc.autoreply.service.ContextHolder;
+import com.mikuwxc.autoreply.service.LoopService;
 import com.mikuwxc.autoreply.utils.LogToFile;
 import com.mikuwxc.autoreply.utils.PersistentCookieStore;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -95,8 +96,10 @@ import okhttp3.Call;
 
 public class MyApp extends Application {
     private static final String TAG = MyApp.class.getSimpleName();
-
-
+    private static Context applicationContext = null;
+    public static Context getAppContext() {
+        return applicationContext;
+    }
     public static final String WX_APP_ID = "wxe7aa599f2f5f44f9";
     public static final String WX_APP_SECRET = "ea2b4d8e7733959d98b41df3254c9346";
     public static final String FILE_URL = "DuoQun";
@@ -121,6 +124,7 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        applicationContext = this;
 
         //设置极光推送的别名
         //setTagAndAlias();

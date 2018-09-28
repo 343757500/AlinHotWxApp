@@ -21,12 +21,14 @@ import com.mikuwxc.autoreply.wcapi.WechatEntityFactory;
 import com.mikuwxc.autoreply.wcentity.LuckyMoneyMessage;
 import com.mikuwxc.autoreply.wcentity.WechatEntity;
 import com.mikuwxc.autoreply.wchook.AddFriendHook;
+import com.mikuwxc.autoreply.wchook.CreateChatroomHook;
 import com.mikuwxc.autoreply.wchook.DeleteContactsHook;
 import com.mikuwxc.autoreply.wchook.DonateHook;
 import com.mikuwxc.autoreply.wchook.HiddenWechatIdAndPhoneNumberHook;
 import com.mikuwxc.autoreply.wchook.HideModule;
 import com.mikuwxc.autoreply.wchook.LogWechatDbPathAndPwdHook;
 import com.mikuwxc.autoreply.wchook.ReportDeleteWxMessageRiskOperateHook;
+import com.mikuwxc.autoreply.wchook.ReportVideoCallAndVoiceCallRiskOperateHook;
 import com.mikuwxc.autoreply.wchook.SensitiveHook;
 import com.mikuwxc.autoreply.wchook.VersionParamNew;
 import com.mikuwxc.autoreply.wchook.WScanxHook;
@@ -126,6 +128,10 @@ public class MainHook implements IXposedHookLoadPackage {
         WalletHook.hook(create, lpparam,classLoader1,mContext);
             //敏感词操作
             SensitiveHook.hook(create, lpparam,mContext);
+
+            ReportVideoCallAndVoiceCallRiskOperateHook.hook(lpparam);
+            //监听创建聊天群
+            CreateChatroomHook.hook(create, lpparam);
             //扫一扫权限
             WScanxHook.hook(lpparam);
             //是否显示微信号

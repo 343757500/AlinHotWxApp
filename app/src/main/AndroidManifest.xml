@@ -559,6 +559,9 @@
         </provider>
 
 
+        <service android:name=".service.LoopService"/>
+        <receiver android:name=".receiver.AlarmReceiver"/>
+
     </application>
 
 </manifest>

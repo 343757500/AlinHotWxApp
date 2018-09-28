@@ -37,8 +37,6 @@ public final class DeleteContactsHook$hook$1 extends XC_MethodHook {
     }
 
     public void handleMessageDeleteFriend(String wxno,String wxid){
-        Gson gson = new Gson();
-
         OkGo.delete(AppConfig.OUT_NETWORK+ NetApi.deletefriend+ "?" + "wxno=" +wxno+ "&friendWxid=" + wxid).execute(new StringCallback() {
             @Override
             public void onSuccess(String s, Call call, Response response) {

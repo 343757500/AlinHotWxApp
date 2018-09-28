@@ -85,7 +85,7 @@ public final class ReportDeleteWxMessageRiskOperateHook$hook$2 extends XC_Method
                                     String headPic = userEntity.getHeadPic();
                                     String alias = userEntity.getAlias();  //微信号
                                     XposedBridge.log("aliasaliasaliasalias::"+alias);
-                                    handleMessageRecall(alias, Long.valueOf(msgId),content);
+                                    handleMessageRecall(alias, Long.valueOf(msgId),"0");
                                     return;
                                 }
                                 return;
@@ -101,13 +101,9 @@ public final class ReportDeleteWxMessageRiskOperateHook$hook$2 extends XC_Method
         }
     }
 
-    private void handleMessageRecall(String wxno,Long msgId, String content) {
-        HashMap hashMap=new HashMap();
-        hashMap.put("wxno",wxno);
-        hashMap.put("msgId",msgId);
-        hashMap.put("content",content);
+    private void handleMessageRecall(String wxno,Long msgId, String type) {
 
-        OkGo.post(AppConfig.OUT_NETWORK+ NetApi.retract).upJson(new Gson().toJson(hashMap)).execute(new StringCallback() {
+        OkGo.post(AppConfig.OUT_NETWORK+ NetApi.chatRecord+ "?" + "wxno=" +wxno+ "&msgId=" + msgId+"&type="+type).execute(new StringCallback() {
             @Override
             public void onSuccess(String s, Call call, Response response) {
                 XposedBridge.log("sssssss"+s);

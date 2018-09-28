@@ -108,4 +108,5 @@
   <com.google.ads.afsn/>
   <com.google.android.ads/>
   <androidx.biometric/>
+  <androidx.concurrent/>
 </metadata>

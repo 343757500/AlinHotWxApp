@@ -111,6 +111,14 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Exception block dominato
                     break;
                 }
                 break;
+            case 51294851:
+                if (str.equals("6.7.2")) {
+                    obj = 15;
+                    break;
+                }
+                break;
+
+
             case 1590021297:
                 if (str.equals("6.3.31")) {
                     obj = null;
@@ -199,6 +207,9 @@ Error: jadx.core.utils.exceptions.JadxRuntimeException: Exception block dominato
                 break;
             case 14:
                 wechatEntity6513 = new WechatEntity6700();
+                break;
+            case 15:
+                wechatEntity6513 = new WechatEntity6702();
                 break;
             default:
                 wechatEntity6513 = new WechatEntityDefault();

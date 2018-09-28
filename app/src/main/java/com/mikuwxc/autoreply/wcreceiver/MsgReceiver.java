@@ -41,6 +41,7 @@ import com.mikuwxc.autoreply.common.util.EventBusUtil;
 import com.mikuwxc.autoreply.common.util.LogUtils;
 import com.mikuwxc.autoreply.common.util.Logger;
 import com.mikuwxc.autoreply.common.util.MyFileUtil;
+import com.mikuwxc.autoreply.common.util.SharedPrefsUtils;
 import com.mikuwxc.autoreply.common.util.ToastUtil;
 import com.mikuwxc.autoreply.modle.C;
 import com.mikuwxc.autoreply.modle.Event;
@@ -51,6 +52,7 @@ import com.mikuwxc.autoreply.modle.HttpImeiBean;
 import com.mikuwxc.autoreply.modle.ImMessageBean;
 import com.mikuwxc.autoreply.presenter.tasks.AsyncFriendTask;
 import com.mikuwxc.autoreply.receiver.Constance;
+import com.mikuwxc.autoreply.service.LoopService;
 import com.mikuwxc.autoreply.wcentity.AddFriendEntity;
 import com.mikuwxc.autoreply.wcentity.CircleFriendEntity;
 import com.mikuwxc.autoreply.xposed.HookMessage;
@@ -108,6 +110,7 @@ public class MsgReceiver extends BroadcastReceiver {
     private String sdkAppId;
     private final String SDcardPath = "/storage/emulated/0/JCM/";
     ArrayList<FriendBean> beanArrayList=new ArrayList<>();
+    ArrayList<String> chatroomArray=new ArrayList<>();
     public static List<HookMessageBean> list_msgFail = new ArrayList<>();
     FriendBean friendBean;
     private String token;
@@ -235,30 +238,12 @@ public class MsgReceiver extends BroadcastReceiver {
             SharedPreferences.Editor ditor = sp.edit();
             ditor.putBoolean("verifyStaus_put", true).commit();
             ToastUtil.showLongToast("开启微信自动通过好友权限");
-          /*  // 获取Runtime对象  获取root权限
-            Runtime runtime = Runtime.getRuntime();
-            try {
-                Process process = runtime.exec("su");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            search[1] = chineseToUnicode(search[1]);
-            execShell(search);*/
 
         } else {
             SharedPreferences sp = context.getSharedPreferences("verifyStaus", Activity.MODE_WORLD_READABLE);
             SharedPreferences.Editor ditor = sp.edit();
             ditor.putBoolean("verifyStaus_put", false).commit();
             ToastUtil.showLongToast("关闭微信自动通过好友权限");
-          /*  // 获取Runtime对象  获取root权限
-            Runtime runtime = Runtime.getRuntime();
-            try {
-                Process process = runtime.exec("su");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            search[1] = chineseToUnicode(search[1]);
-            execShell(search);*/
         }
 
     }
@@ -275,30 +260,12 @@ public class MsgReceiver extends BroadcastReceiver {
             SharedPreferences.Editor ditor = sp.edit();
             ditor.putBoolean("moneyStaus_put",true).commit();
             ToastUtil.showLongToast("开启微信自动抢红包权限");
-            // 获取Runtime对象  获取root权限
-           /* Runtime runtime = Runtime.getRuntime();
-            try {
-                Process process = runtime.exec("su");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            search[1] = chineseToUnicode(search[1]);
-            execShell(search);*/
 
         }else{
             SharedPreferences sp = context.getSharedPreferences("moneyStaus", Activity.MODE_WORLD_READABLE);
             SharedPreferences.Editor ditor = sp.edit();
             ditor.putBoolean("moneyStaus_put",false).commit();
             ToastUtil.showLongToast("关闭微信自动抢红包权限");
-            // 获取Runtime对象  获取root权限
-          /*  Runtime runtime = Runtime.getRuntime();
-            try {
-                Process process = runtime.exec("su");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            search[1] = chineseToUnicode(search[1]);
-            execShell(search);*/
         }
 
 
@@ -376,12 +343,16 @@ public class MsgReceiver extends BroadcastReceiver {
                             }
                             initDataLogin(imLoginBean);
                             initTMConfig(context);
-                            loginIM(context);
+                            loginIM(context,wxno);
                             //登陆IM成功再同步好友
                             AsyncFriendTask.sendFriendList(wxno, friendBean, false);
                             SharedPreferences sp = context.getSharedPreferences("test", Activity.MODE_WORLD_READABLE);
                             SharedPreferences.Editor ditor = sp.edit();
                             ditor.putBoolean("test_put",true).commit();
+
+                            //服务保活加上权限会死循环，需要更改服务的状态
+                            MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/updateAlive", "true");
+
                             ToastUtil.showLongToast("开启所有权限");
                             handlerAlive.postDelayed(runnableAlive, 10000);//每两秒执行一次runnable.
 
@@ -418,6 +389,9 @@ public class MsgReceiver extends BroadcastReceiver {
                             SharedPreferences sp = context.getSharedPreferences("test", Activity.MODE_WORLD_READABLE);
                             SharedPreferences.Editor ditor = sp.edit();
                             ditor.putBoolean("test_put",false).commit();
+                            //服务保活加上权限会死循环，需要更改服务的状态
+                            MyFileUtil.writeToNewFile(AppConfig.APP_FOLDER + "/updateAlive", "false");
+
                             ToastUtil.showLongToast("关闭所有权限");
                            //移除定时保活功能
                             handlerAlive.removeCallbacks(runnableAlive);
@@ -501,7 +475,7 @@ public class MsgReceiver extends BroadcastReceiver {
     /**
      * 登录腾讯云 IM
      */
-    private void loginIM(final Context context) {
+    private void loginIM(final Context context, final String wxno) {
         TIMUser user = new TIMUser();
         user.setIdentifier(AppConfig.getIdentifier());
         //发起登录请求
@@ -522,6 +496,11 @@ public class MsgReceiver extends BroadcastReceiver {
                         NewMessageListener(context);
                         handler.postDelayed(runnable, 20000);//每两秒执行一次runnable.
                         sendMsg();
+
+                        //保活Service
+                        Intent intent=new Intent(context,LoopService.class);
+                        intent.putExtra("wxno",wxno);
+                        context.startService(intent);
                     }
 
                     @Override
@@ -754,6 +733,15 @@ public class MsgReceiver extends BroadcastReceiver {
                 beanArrayList.add(friendBean);
             }
 
+            //获取群聊信息传给后台
+            Cursor chatroom = database.query("chatroom", null, null, null, null, null, null);
+            while (chatroom.moveToNext()){
+                String roomowner = chatroom.getString(chatroom.getColumnIndex("roomowner"));
+                chatroomArray.add(roomowner);
+            }
+
+            String  chatroomString= JSON.toJSONString(chatroomArray);
+            Log.e("111","chatroomString:::"+chatroomString);
             String s = JSON.toJSONString(beanArrayList);
             Log.e("111",s);
             File decrypteddatabaseFile = context.getDatabasePath(SDcardPath + decryptedName);
@@ -819,7 +807,14 @@ public class MsgReceiver extends BroadcastReceiver {
 
     //是否保活权限
     private void permissionAlive(String wxno, final Context context) {
-        OkGo.post(AppConfig.OUT_NETWORK + NetApi.loginAlive + "?wxno=" + wxno).execute(new StringCallback() {
+        String aliveStaue = MyFileUtil.readFromFile(AppConfig.APP_FOLDER + "/updateAlive");
+        if ("true".equals(aliveStaue)){
+            aliveStaue="0";
+        }else{
+            aliveStaue="1";
+        }
+
+        OkGo.post(AppConfig.OUT_NETWORK + NetApi.loginAlive + "?wxno=" + wxno+"&usingState="+aliveStaue).execute(new StringCallback() {
             @Override
             public void onSuccess(String s, Call call, okhttp3.Response response) {
                 Log.e("111", "result:" + s);

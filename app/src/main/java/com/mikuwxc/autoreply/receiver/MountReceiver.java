@@ -154,8 +154,8 @@ public class MountReceiver extends XC_MethodHook {
         String deleFriend = intent.getStringExtra("deleFriend");
 
 
-        XposedBridge.log("circleText:"+circleText+"fodderUrl"+fodderUrl+"circleType"+circleType);
-        XposedBridge.log("deleFriend:"+deleFriend+"type:"+type);
+        XposedBridge.log("contentcontentcontent:::"+content);
+        XposedBridge.log("typetypetypetypetype:::"+type);
         if (name!=null) {
             try {
                  final String path = Environment.getExternalStorageDirectory().toString() + "/shidoe/";
@@ -278,17 +278,20 @@ public class MountReceiver extends XC_MethodHook {
             public void run() {
                 try {
 
-                    String[] split = path.split(",");
+//                    String[] split = path.split(",");
 
-                    String suffixes="avi|mpeg|3gp|mp3|mp4|wav|jpeg|gif|jpg|png|apk|exe|txt|html|htm|java|doc|amr";
+//                    String suffixes="avi|mpeg|3gp|mp3|mp4|wav|jpeg|gif|jpg|png|apk|exe|txt|html|htm|java|doc|amr";
                     String file=path.substring(path.lastIndexOf('/')+1);//截取url最后的数据
-                    Pattern pat=Pattern.compile("[\\w]+[\\.]("+suffixes+")");//正则判断
-                    Matcher mc=pat.matcher(file);
-                    while(mc.find()){
-                        //截取文件名后缀名
-                        substring = mc.group();
-                        XposedBridge.log("123456789"+ substring);
-                    }
+                    substring=file;
+//                    XposedBridge.log("path:::;"+path);
+//                    XposedBridge.log("file:::;"+file);
+//                    Pattern pat=Pattern.compile("[\\w]+[\\.]("+suffixes+")");//正则判断
+//                    Matcher mc=pat.matcher(file);
+//                    while(mc.find()){
+//                        //截取文件名后缀名
+//                        substring = mc.group();
+//                        XposedBridge.log("123456789"+ substring);
+//                    }
 
                     URL url = new URL(path);
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();

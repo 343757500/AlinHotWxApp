@@ -112,4 +112,22 @@ public class MessageEntity {
     public void setType(int i) {
         this.type = i;
     }
+
+    @Override
+    public String toString() {
+        return "MessageEntity{" +
+                "content='" + content + '\'' +
+                ", createTime=" + createTime +
+                ", customMsgId='" + customMsgId + '\'' +
+                ", duration=" + duration +
+                ", fileSize=" + fileSize +
+                ", imgPath='" + imgPath + '\'' +
+                ", isSend=" + isSend +
+                ", msgId=" + msgId +
+                ", msgSvrId='" + msgSvrId + '\'' +
+                ", self='" + self + '\'' +
+                ", talker='" + talker + '\'' +
+                ", type=" + type +
+                '}';
+    }
 }

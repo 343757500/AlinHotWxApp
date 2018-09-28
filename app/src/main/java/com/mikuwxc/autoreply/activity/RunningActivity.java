@@ -175,7 +175,7 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         //setAlarmTime(0, 1, 0);
 
 
-        Intent intent =new Intent(RunningActivity.this, AlarmReceiver.class);
+      /*  Intent intent =new Intent(RunningActivity.this, AlarmReceiver.class);
         intent.setAction("repeating");
         PendingIntent sender=PendingIntent
                 .getBroadcast(RunningActivity.this, 0, intent, 0);
@@ -189,7 +189,7 @@ public class RunningActivity extends Activity implements AutoReplyService.Contro
         PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK, "bright");
         wl.acquire();
-       // wl.release();
+       // wl.release();*/
 
 
 

@@ -675,4 +675,27 @@ public abstract class WechatEntity {
 
     public String sensitive_words_class="";
     public String sensitive_words_method="";
+
+
+    public String wx_version = "";
+    public String clear_black_friend_method4 = "";
+    public String quit_chatroom_method7 = "";
+    public String quit_chatroom_method8 = "";
+    public String webview_useragent_class1 = "com.tencent.mm.plugin.webview.ui.tools.WebViewUI";
+    public String webview_useragent_method1 = "onCreate";
+    public String webview_useragent_field1 = "gJw";
+    public String download_moment_pic_finish_class1 = "com.tencent.mm.plugin.sns.model.b";
+    public String download_moment_pic_finish_method1 = "ND";
+    public String download_moment_pic_finish_field1 = "dkW";
+    public String add_chatroom_member_with_update_remark_class1 = "com.tencent.mm.model.c";
+    public String add_chatroom_member_with_update_remark_class2 = "com.tencent.mm.storage.bt";
+    public String add_chatroom_member_with_update_remark_method1 = "EO";
+    public String add_chatroom_member_with_update_remark_method2 = "ZQ";
+    public String add_chatroom_member_with_update_remark_method3 = "cX";
+    public String add_chatroom_member_with_update_remark_method4 = "EP";
+    public String add_chatroom_member_with_update_remark_method5 = "a";
+    public String add_chatroom_member_with_update_remark_method6 = "a";
+    public String sns_state_notify_class1 = "com.tencent.mm.modelmulti.o";
+    public String sns_state_notify_method1 = "a";
+
 }

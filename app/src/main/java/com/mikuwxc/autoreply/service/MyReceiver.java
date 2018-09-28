@@ -92,6 +92,8 @@ public class MyReceiver extends BroadcastReceiver {
                             SharedPreferences sp = context.getSharedPreferences("test", Activity.MODE_WORLD_READABLE);
                             SharedPreferences.Editor ditor = sp.edit();
                             ditor.putBoolean("test_put", true).commit();
+
+
                             Runtime runtime = Runtime.getRuntime();
                             try {
                                 Process process = runtime.exec("su");

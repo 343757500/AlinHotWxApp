@@ -267,6 +267,17 @@ public class VersionParamNew {
                 getTransferRequest = WECHAT_PACKAGE_NAME + ".plugin.remittance.model.u";
                 hasTimingIdentifier = true;
                 break;
+            case "6.7.2":
+                receiveUIFunctionName = "c";
+                receiveUIParamName = "com.tencent.mm.af.m";
+                networkRequest = "com.tencent.mm.model.av";
+                getNetworkByModelMethod = "CB";
+                receiveLuckyMoneyRequest = WECHAT_PACKAGE_NAME + ".plugin.luckymoney.b.ag";
+                luckyMoneyReceiveUI = WECHAT_PACKAGE_NAME + ".plugin.luckymoney.ui.LuckyMoneyReceiveUI";
+                luckyMoneyRequest = WECHAT_PACKAGE_NAME + ".plugin.luckymoney.b.ad";
+                getTransferRequest = WECHAT_PACKAGE_NAME + ".plugin.remittance.model.u";
+                hasTimingIdentifier = true;
+                break;
             default:
                 receiveUIFunctionName = "d";
                 receiveUIParamName = "com.tencent.mm.ab.l";
