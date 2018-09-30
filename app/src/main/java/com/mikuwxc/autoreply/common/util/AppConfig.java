@@ -18,7 +18,7 @@ public class AppConfig {
     public static final String ROOT = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String APP_FOLDER = ROOT + "/HSL_WXFZ";
     public static final String APP_ADD = ROOT + "/AddFriend";
-   // public static String OUT_NETWORK = "http://192.168.5.168:8080/";
+    //public static String OUT_NETWORK = "http://192.168.5.169:8080/";
     //public static String OUT_NETWORK = "http://192.168.5.170:8080/";
 
     public static String OUT_NETWORK = "http://120.24.102.187:8066/";

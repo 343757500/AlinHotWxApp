@@ -269,7 +269,7 @@ public class VersionParamNew {
                 break;
             case "6.7.2":
                 receiveUIFunctionName = "c";
-                receiveUIParamName = "com.tencent.mm.af.m";
+                receiveUIParamName = "com.tencent.mm.af.m";   //微信源码能找到
                 networkRequest = "com.tencent.mm.model.av";
                 getNetworkByModelMethod = "CB";
                 receiveLuckyMoneyRequest = WECHAT_PACKAGE_NAME + ".plugin.luckymoney.b.ag";

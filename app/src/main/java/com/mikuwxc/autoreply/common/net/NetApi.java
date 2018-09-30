@@ -33,6 +33,6 @@ public class NetApi {
     public static final String retract = "api/1.0/wechatMessage/retract";  //撤回消息
 
     public static final String chatRecord = "api/1.0/log/chatRecord";  //撤回和删除消息
-
+    public static final String creatchatroom = "api/1.0/log/chatroom/";  //
     public static final String upDateHot = "/api/1.0/logger/version/code";
 }
